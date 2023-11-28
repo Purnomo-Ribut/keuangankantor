@@ -25,11 +25,13 @@
 	<div class="container-fluid">
 		<div class="card">
 			<div class="card-body">
-				<form action="{{route('updatetbl_divisi')}}" method="post">
+				
+				
+				<form action="{{route('updatetbl_divisi', ['id_divisi' => $divisi->id_divisi])}} " method="post">
 				@csrf
 				<div class="form-group">
-					<label for="nama">Nama Divisi</label>
-					<input type="text" name="nama" id="nama" class="form-control" required placeholder="Masukkan Nama Divisi" value="{{$divisi->nama_divisi}}">
+					<label for="nama_divisi">Nama Divisi</label>
+					<input type="text" name="nama_divisi" id="nama_divisi" class="form-control" required placeholder="Masukkan Nama Divisi" value="{{$divisi->nama_divisi}}">
 				</div>
 				<div class="text-right">
 					<button type="submit" class="btn btn-success">Simpan</button>

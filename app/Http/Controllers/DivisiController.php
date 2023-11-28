@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\tbl_divisi;
 use Illuminate\Http\Request;
 
+
 class DivisiController extends Controller
 {
     /**

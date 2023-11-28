@@ -27,9 +27,9 @@
 				<a href="{{route('createtbl_divisi')}}" class="btn btn-primary" role="button">Tambah Data</a>
 			</div>
 			<div class="card-body">
-				<table class="table table-hover mb-0" id="dataTable">
+				<table class="table  table-hover mb-0" id="dataTable">
 					<thead>
-						<tr>
+						<tr class="bg-info">
 							<th class="text-center">No</th>
 							<th class="text-center">Nama Divisi</th>
 							<th class="text-center">Aksi</th>

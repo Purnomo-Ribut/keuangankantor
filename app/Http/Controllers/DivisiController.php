@@ -1,0 +1,102 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Divisi;
+use App\tbl_divisi;
+use Illuminate\Http\Request;
+
+class DivisiController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $divisis = tbl_divisi::all();
+        return view("divisi.index",compact("divisis"));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view("divisi.create");
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $validasiData = validator($request->all(),[
+          "nama_divisi" => "required|string|max:255",  
+        ])->validate();
+        $divisi = new tbl_divisi($validasiData);
+        $divisi->save();
+        
+        return redirect(route("daftarDivisi"));
+
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Divisi  $divisi
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Divisi $divisi)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Divisi  $divisi
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Divisi $divisi)
+    {
+        return view("divisi.edit",[
+            "divisi"=>$divisi,
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Divisi  $divisi
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Divisi $divisi)
+    {
+        $validasiData = validator($request->all(),[
+            "nama_divisi" => "required|string|max:255",  
+          ])->validate();
+         $divisi->nama=$validasiData["nama_divisi"];
+         $divisi->save();
+          
+          return redirect(route("daftarDivisi"));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Divisi  $divisi
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Divisi $divisi)
+    {
+        //
+    }
+}

@@ -15,9 +15,6 @@
 	<!-- Google Font: Source Sans Pro -->
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 
-	{{-- link datatable --}}
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-
 	@yield('addCss')
 </head>
 
@@ -38,7 +35,7 @@
 	<!-- ./wrapper -->
 
 	<!-- REQUIRED SCRIPTS -->
-
+	@include('sweetalert::alert')
 	<!-- jQuery -->
 	<script src="{{asset('js/jquery.min.js')}}"></script>
 	<!-- Bootstrap 4 -->
@@ -47,15 +44,6 @@
 	<script src="{{asset('js/adminlte.min.js')}}"></script>
 	<!-- Sweetalert -->
 	<script src="{{asset('js/sweetalert.min.js')}}"></script>
-
-	{{-- script dattables --}}
-    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-
-	<script>
-		new DataTable('#dataTable');
-	</script>
 
 	@yield('addJavascript')
 </body>

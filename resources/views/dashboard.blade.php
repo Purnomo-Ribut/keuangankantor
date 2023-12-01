@@ -21,6 +21,28 @@
 <!-- Main content -->
 <div class="content">
 	<div class="container-fluid">
+	<div class="row">
+			<div class="card light m-3 " style="width: 18rem;">
+				<div class="card-header text-center">
+				<i class="nav-icon fa fa-user"></i>
+					<h4>Divisi</h4>
+				</div>
+				<div class="card-body" >
+					<h5 class="card-text text-center">{{$dataDivisi}} Divisi</h5>
+					<!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+				</div>
+			</div>
+			<div class="card light m-3" style="width: 18rem;">
+				<div class="card-header text-center">
+				<i class="nav-icon fa fa-money"></i>
+					<h4>Kategori</h4>
+				</div>
+				<div class="card-body" >
+					<h5 class="card-text text-center">{{$dataKategori}} Kategori</h5>
+					<!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+				</div>
+			</div>
+		</div>
 		
 	</div><!-- /.container-fluid -->
 </div>

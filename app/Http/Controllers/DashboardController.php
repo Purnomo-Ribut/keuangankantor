@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+Use App\tbl_divisi;
+use App\tbl_kategori;
 
 class DashboardController extends Controller
 {
@@ -23,6 +25,8 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('dashboard');
-    }
+        $dataDivisi = tbl_divisi::all()->count();
+        $dataKategori = tbl_kategori::all()->count();
+        return view('dashboard', compact('dataDivisi', 'dataKategori'));
+}
 }

@@ -31,27 +31,21 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fa fa-th"></i>
-                        <p>Direktur</p>
+                    <a href="{{route('daftarDivisi')}}" class="nav-link">
+                        <i class="nav-icon fa fa-users"></i>
+                        <p>Divisi</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fa fa-book"></i>
-                        <p>Manager</p>
+                    <a href="{{route('daftarUser')}}" class="nav-link">
+                        <i class="nav-icon fa fa-user"></i>
+                        <p>User</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fa fa-th"></i>
-                        <p>Karyawan</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fa fa-book"></i>
-                        <p>Mata Pelajaran</p>
+                    <a href="{{route('daftarKategori')}}" class="nav-link">
+                        <i class="nav-icon fa fa-money"></i>
+                        <p>Kategori Keuangan</p>
                     </a>
                 </li>
                 <li class="nav-item">

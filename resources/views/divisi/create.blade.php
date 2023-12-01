@@ -25,7 +25,7 @@
 	<div class="container-fluid">
 		<div class="card">
 			<div class="card-body">
-				<form action="{{route('storetbl_divisi')}}" method="post">
+				<form action="{{route('store_tbl_divisi')}}" method="post">
 				@csrf
 				<div class="form-group">
 					<label for="nama">Nama Divisi</label>

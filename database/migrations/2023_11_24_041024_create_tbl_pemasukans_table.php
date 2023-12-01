@@ -22,6 +22,7 @@ class CreateTblPemasukansTable extends Migration
             // bingung tipenya
             $table->bigInteger("id_user_create");
             $table->bigInteger("id_user_edit");
+            $table->integer("jml_masuk");
             $table->date("tgl_pemasukan");
             $table->text("catatan");
             $table->string('bukti_pemasukan');

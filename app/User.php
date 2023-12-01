@@ -18,9 +18,9 @@ class User extends Authenticatable
      * @var array
      */
 
-    // protected $fillable = [
-    //     'nama', 'username', 'password',
-    // ];
+    // Model User
+    protected $fillable = ['id_divisi', 'nama', 'role'];
+
 
     protected $guarded = [
         'id'
@@ -43,4 +43,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function division() //relasi terhadap tbl_users
+    {
+        return $this->belongsTo(tbl_divisi::class, 'id_divisi');
+    } 
 }

@@ -22,6 +22,7 @@ class CreateTblPengeluaransTable extends Migration
             // bingung tipenya
             $table->bigInteger("id_user_create");
             $table->bigInteger("id_user_edit");
+            $table->integer("jml_keluar");
             $table->date("tgl_pengeluaran");
             $table->text("catatan");
             $table->string('bukti_pengeluaran');

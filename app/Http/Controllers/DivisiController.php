@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\tbl_divisi;
 use Illuminate\Http\Request;
 
-
 class DivisiController extends Controller
 {
     /**
@@ -43,7 +42,7 @@ class DivisiController extends Controller
         $divisi = new tbl_divisi($validasiData);
         $divisi->save();
         
-        return redirect(route("daftarDivisi"));
+        return redirect(route("daftarDivisi"))->with("success","Divisi $divisi->nama_divisi berhasil ditambah");
 
     }
 
@@ -88,7 +87,7 @@ class DivisiController extends Controller
     $divisi->nama_divisi = $validasiData["nama_divisi"];
     $divisi->save();
 
-    return redirect(route("daftarDivisi"));
+    return redirect(route("daftarDivisi"))->with("success","Divisi $divisi->nama_divisi berhasil diubah");
 }
 
     
@@ -102,6 +101,7 @@ class DivisiController extends Controller
      */
     public function destroy(tbl_divisi $divisi)
     {
-        //
+        $divisi->delete();
+        return redirect(route("daftarDivisi"))->with("success","Divisi $divisi->nama_divisi berhasil dihapus");
     }
 }

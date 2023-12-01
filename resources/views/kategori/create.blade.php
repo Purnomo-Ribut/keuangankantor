@@ -6,13 +6,13 @@
 	<div class="container-fluid">
 		<div class="row mb-2">
 			<div class="col-sm-6">
-				<h1 class="m-0 text-dark">Edit Divisi</h1>
+				<h1 class="m-0 text-dark">Tambah Kategori</h1>
 			</div><!-- /.col -->
 			<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
 					<li class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboard</a></li>
-					<li class="breadcrumb-item"><a href="{{route('daftarDivisi')}}">Daftar Divisi</a></li>
-					<li class="breadcrumb-item active">Edit Divisi</li>
+					<li class="breadcrumb-item"><a href="{{route('daftarKategori')}}">Kategori</a></li>
+					<li class="breadcrumb-item active">Tambah Kategori</li>
 				</ol>
 			</div><!-- /.col -->
 		</div><!-- /.row -->
@@ -25,14 +25,21 @@
 	<div class="container-fluid">
 		<div class="card">
 			<div class="card-body">
-			<form action="{{ route('updateDivisi', ['divisi' => $divisi->id_divisi]) }}" method="post">
+				<form action="{{route('storeKategori')}}" method="post">
 				@csrf
 				<div class="form-group">
-					<label for="nama">Nama Divisi</label>
-					<input type="text" name="nama_divisi" id="nama_divisi" class="form-control" required="required" placeholder="Masukkan Nama Divisi" value="{{$divisi->nama_divisi}}">
+					<label for="nama">Nama Kategori</label>
+					<input type="text" name="nama_kategori" id="nama_kategori" class="form-control" required placeholder="Masukkan Nama Kategori">
+				</div>
+				<div class="form-group">
+					<label for="nama">Jenis</label>
+					<select name="jenis_kategori" id="jenis_kategori" class="form-control" required="required">
+					@foreach(['Pengeluaran', 'Pemasukkan'] as $option)
+                        <option value="{{ $option }}">{{ $option }}</option>
+                    @endforeach
+					</select>
 				</div>
 				<div class="text-right">
-					<a href="{{route('daftarDivisi')}}" class="btn btn-danger">Batal</a>
 					<button type="submit" class="btn btn-success">Simpan</button>
 				</div>
 				</form>

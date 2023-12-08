@@ -25,7 +25,7 @@ class DivisiController extends Controller
      */
     public function create()
     {
-        return view("divisi.create");
+        return view("divisi.index");
     }
 
     /**
@@ -65,7 +65,7 @@ class DivisiController extends Controller
      */
     public function edit(tbl_divisi $divisi)
     {
-        return view("divisi.edit",[
+        return view("divisi.index",[
             "divisi"=>$divisi,
         ]);
     }

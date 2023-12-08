@@ -12,7 +12,7 @@
 				<ol class="breadcrumb float-sm-right">
 					<li class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboard</a></li>
 					<li class="breadcrumb-item"><a href="{{route('daftarUser')}}">User</a></li>
-					<li class="breadcrumb-item active">Tambah User</li>
+					<li class="breadcrumb-item active">Edit</li>
 				</ol>
 			</div><!-- /.col -->
 		</div><!-- /.row -->
@@ -23,19 +23,19 @@
 <!-- Main content -->
 <div class="content">
 	<div class="container-fluid">
-		<div class="card">
+		<div class="card"> 
 			<div class="card-body">
-				<form action="{{route('storeUser')}}" method="post">
+				<form action="{{route('updateUser',['id'=>$user->id])}}" method="post">
 				@csrf
 					<div class="form-group">
 						<label for="nama">Nama</label>
-						<input type="text" name="nama" id="nama" class="form-control" required placeholder="Masukkan Nama">
+						<input type="text" name="nama" id="nama" class="form-control" required placeholder="Masukkan Nama" value="{{$user->nama}}">
 					</div>
 					<div class="form-group">
 						<label for="role">Jabatan</label>
 						<select name="role" id="role" class="form-control" required="required">
 							@foreach($roles as $role)
-							<option value="{{ $role->id_role }}">{{ $role->role }}</option>
+								<option value="{{ $role->id_role }}" {{$role->id_role == $user->role ? "selected": ""}}>{{ $role->role }}</option>
 							@endforeach
 						</select>
 					</div>
@@ -43,7 +43,7 @@
 						<label for="divisi">Divisi</label>
 						<select name="id_divisi" id="id_divisi" class="form-control" required="required">
 							@foreach($divisis as $divisi)
-							<option value="{{ $divisi->id_divisi }}">{{ $divisi->nama_divisi }}</option>
+							<option value="{{ $divisi->id_divisi }}" {{$divisi->id_divisi == $user->id_divisi ? "selected": ""}}>{{ $divisi->nama_divisi }}</option>
 							@endforeach
 						</select>
 					</div>

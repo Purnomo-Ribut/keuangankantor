@@ -15,8 +15,14 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
+        $roles = \App\tbl_role::all();
+        $divisis = \App\tbl_divisi::all();
         return view("user.index",
-        ["users"=>$users]);
+        [
+            "users"=>$users,
+            "roles"=>$roles,
+            "divisis"=>$divisis,
+        ]);
     }
 
     /**
@@ -26,11 +32,14 @@ class UserController extends Controller
      */
     public function create()
     {
+        $roles = \App\tbl_role::all();
         $divisis = \App\tbl_divisi::all();
-        return view("user.create",[
+        return view("user.index")->with([
+            "roles" => $roles,
             "divisis" => $divisis
         ]);
     }
+    
 
     /**
      * Store a newly created resource in storage.
@@ -41,16 +50,24 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validasiData = validator($request->all(),[
-            "nama"=>"required|string|max:255",  
-            "role"=>"required|string|max:255", 
-            "id_divisi"=>"required|integer",  
+            "nama"     => "required|string|max:255",  
+            "role"  => "required|integer",  
+            "id_divisi"=> "required|integer",  
         ])->validate();
-        $user= new User($validasiData);
-        $user->save();
-        return redirect(route("daftarUser"));  
     
+        $user = new User($validasiData);
+        $user->save();
+        $roles = \App\tbl_role::all();
+        $divisis = \App\tbl_divisi::all();
+    
+        return redirect(route("daftarUser"))
+            ->with([
+                "success" => "Data $user->nama berhasil ditambah",
+                "roles" => $roles,
+                "divisis" => $divisis,
+            ]);
     }
- 
+    
     /**
      * Display the specified resource.
      *
@@ -70,7 +87,13 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        $roles = \App\tbl_role::all();
+        $divisis = \App\tbl_divisi::all();
+        return view("user.edit",[
+            "user" => $user,
+            "roles" => $roles,
+            "divisis" => $divisis
+        ]);
     }
 
     /**
@@ -82,7 +105,16 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $validasiData = validator($request->all(),[
+            "nama"     =>"required|string|max:255",  
+            "role"  => "required|integer",  
+            "id_divisi"=>"required|integer",  
+        ])->validate();
+        $user->nama=$validasiData["nama"];
+        $user->role=$validasiData["role"];
+        $user->id_divisi=$validasiData["id_divisi"];
+        $user->save();
+        return redirect(route("daftarUser"));  
     }
 
     /**
@@ -93,6 +125,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return redirect(route("daftarUser"))->with("success","Data $user->nama berhasil dihapus");
     }
 }

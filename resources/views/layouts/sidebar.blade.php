@@ -37,6 +37,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{route('daftarRole')}}" class="nav-link">
+                        <i class="nav-icon fa fa-briefcase"></i>
+                        <p>Role</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{route('daftarUser')}}" class="nav-link">
                         <i class="nav-icon fa fa-user"></i>
                         <p>User</p>

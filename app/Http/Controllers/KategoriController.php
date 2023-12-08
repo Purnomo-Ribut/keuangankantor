@@ -27,7 +27,7 @@ class KategoriController extends Controller
      */
     public function create()
     {
-        return view("kategori.create");
+        return view("kategori.index");
     }
 
     /**
@@ -69,7 +69,7 @@ class KategoriController extends Controller
      */
     public function edit(tbl_kategori $kategori)
     {
-        return view("kategori.edit",[
+        return view("kategori.index",[
             "kategori"=>$kategori,
         ]);
     }

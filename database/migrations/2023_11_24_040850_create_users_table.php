@@ -16,10 +16,10 @@ class CreateUsersTable extends Migration
         Schema::create('tbl_users', function (Blueprint $table) {
             $table->bigIncrements('id'); 
             $table->integer('id_divisi')->unsigned()->nullable();
+            $table->integer('role')->unsigned()->nullable();
+            $table->string('nama');
             $table->string('username')->nullable();
             $table->string('password')->nullable();
-            $table->string('role')->nullable();
-            $table->string('nama');
             $table->enum('jenis_kelamin', ['Laki-laki', 'Perempuan'])->nullable();
             $table->string('nomor_telepon')->nullable();
             $table->text('alamat')->nullable();
@@ -29,6 +29,7 @@ class CreateUsersTable extends Migration
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

@@ -15,8 +15,13 @@ use Illuminate\Support\Facades\Route; //class untuk auth
 */
 
 Route::get('/', function () {
-    return redirect(route('login'));
+    return view('login.index');
 });
+// lolgin autch
+route::get("/","LoginController@login" )->name("index");
+route::post("/login","LoginController@check" )->name("loginCheck");
+
+// 
 Route::get('/starter', function () {
     return view('starter');
 });
@@ -41,10 +46,25 @@ Route::middleware('auth')->group(function () {
     Route::post("/kategori/{kategori}/update", "KategoriController@update")->name("updateKategori");
     Route::get("/kategori/{kategori}/delete", "KategoriController@destroy")->name("deleteKategori");
 
+    // role
+    Route::get("/role","RoleController@index")->name("daftarRole");
+    Route::get("/role/create","RoleController@create")->name("createRole");
+    Route::post("/role/store","RoleController@store")->name("storeRole");
+    Route::get("/role/{role}/edit","RoleController@edit")->name("editRole");
+    Route::post("/role/{role}/update", "RoleController@update")->name("updateRole");
+    Route::get("/role/{role}/delete", "RoleController@destroy")->name("deleteRole");
+
     //User
     Route::get("/user","UserController@index")->name("daftarUser");
     Route::get("/user/create","UserController@create")->name("createUser");
     Route::post("/user/store","UserController@store")->name("storeUser");
+    Route::get("/user/{user}/edit","UserController@edit")->name("editUser");
+    Route::post("/user/{user}/update", "UserController@update")->name("updateUser");
+    Route::get("/user/{user}/delete", "UserController@destroy")->name("deleteUser");
+    // Route::get('/coba', function () {
+    //     return view('login.index');
+    // });
+
 
 });
 

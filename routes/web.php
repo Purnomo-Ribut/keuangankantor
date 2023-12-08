@@ -14,22 +14,34 @@ use Illuminate\Support\Facades\Route; //class untuk auth
 |
 */
 
-Route::get('/', function () {
-    return view('login.index');
-});
+// Route::get('/', function () {
+//     return view('login.index');
+// });
 // lolgin autch
 route::get("/","LoginController@login" )->name("index");
-route::post("/login","LoginController@check" )->name("loginCheck");
+route::post("/","LoginController@authenticate")->name("authenticate");
+// Route::post('/login', 'App\Http\Controllers\LoginController@authenticate')->name("authenticate");
+route::get('/logout', 'LoginController@logout')->name('logout');
 
 // 
 Route::get('/starter', function () {
     return view('starter');
 });
+Auth::routes();
 
-Auth::routes(['verify' => false, 'reset' => false]);
+// Auth::routes(['verify' => false, 'reset' => false]);
 
-Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+// Route::middleware('auth')->group(function () {
+   
+//     // Route::get('/coba', function () {
+//     //     return view('login.index');
+//     // });
+
+
+// });
+
+Route::prefix("admin")->middleware("auth", "role:2")->group(function(){
+    Route::get('/', 'DashboardController@index')->name('dashboard');
     // divisi
     Route::get("/divisi","DivisiController@index")->name("daftarDivisi");
     Route::get("/divisi/create","DivisiController@create")->name("createDivisi");
@@ -61,17 +73,19 @@ Route::middleware('auth')->group(function () {
     Route::get("/user/{user}/edit","UserController@edit")->name("editUser");
     Route::post("/user/{user}/update", "UserController@update")->name("updateUser");
     Route::get("/user/{user}/delete", "UserController@destroy")->name("deleteUser");
-    // Route::get('/coba', function () {
-    //     return view('login.index');
-    // });
-
-
+    
 });
 
-Route::prefix('direktur')->group(function () {
-    Route::get('/dashboard', function () {
+Route::prefix("direktur")->middleware("auth", "role:1")->group(function(){
+    Route::get('/', function () {
         return view('direktur.dashboard');
     });
-}); //rute direktur sementara
 
-Route::get('dashboards', 'DashboardController@index')->middleware('admin');
+});
+// Route::prefix('direktur')->group(function () {
+//     Route::get('/dashboard', function () {
+//         return view('direktur.dashboard');
+//     });
+// }); //rute direktur sementara
+
+// Route::get('dashboards', 'DashboardController@index')->middleware('admin');

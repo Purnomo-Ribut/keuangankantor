@@ -9,7 +9,7 @@
     integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="{{ asset('css/login.css') }}">
-  <title>login and signup page</title>
+  <title>Halaman Login</title>
 </head>
 
 <body>
@@ -29,23 +29,34 @@
 
     <!-- Login -->
     <div class="form-container sign-in-container">
-      <form action="{{route('login')}}"  method="post">
+      <form action=""  method="post">
       @csrf
-        <h1>Sign in</h1>
+        <h1>Login </h1>
         <div class="social-container">
           <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
           <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
           <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
         </div>
-        <span>or use your account</span>
-        <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username"
-        value="{{old('username')}}" placeholder="Masukkan username" required autocomplete="username" autofocus />
+        <span>
+          
+        <!-- Menampilkan pesan kesalahan -->
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        </span>
+        <input id="username" type="text" name="username" placeholder="Masukkan username" required autocomplete="username" autofocus />
         
-        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
-        placeholder="Password" name="password" required autocomplete="current-password">
+        <input id="password" type="password" placeholder="Password" name="password" required autocomplete="current-password">
+
 
         <a href="#">Forgot your password?</a>
-        <button>Sign In</button>
+        <button type="submit" >Sign In</button>
       </form>
     </div>
     <div class="overlay-container">

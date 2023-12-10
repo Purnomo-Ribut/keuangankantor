@@ -49,16 +49,26 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validasiData = validator($request->all(),[
-            "nama"     => "required|string|max:255",  
-            "role"  => "required|integer",  
-            "id_divisi"=> "required|integer",  
-        ])->validate();
+        // $validasiData = validator($request->all(),[
+        //     "nama"     => "required|string|max:255",  
+        //     "role"  => "required|integer",  
+        //     "id_divisi"=> "required|integer", 
+        //     "username" => "required|string",
+        //     "password" => "required|string",
+        // ])->validate();
     
-        $user = new User($validasiData);
-        $user->save();
+        // $user = new User($validasiData);
+        // $user->save();
         $roles = \App\tbl_role::all();
         $divisis = \App\tbl_divisi::all();
+
+        $user = User::create([
+            "nama"      => $request->nama,
+            "role"      => $request->role,
+            "id_divisi" => $request->id_divisi,
+            "username"  => $request->username,
+            "password"  => bcrypt($request->password)
+        ]);
     
         return redirect(route("daftarUser"))
             ->with([

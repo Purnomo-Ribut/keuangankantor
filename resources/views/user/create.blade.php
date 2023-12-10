@@ -27,10 +27,12 @@
 			<div class="card-body">
 				<form action="{{route('storeUser')}}" method="post">
 				@csrf
+				<!-- nama -->
 					<div class="form-group">
 						<label for="nama">Nama</label>
 						<input type="text" name="nama" id="nama" class="form-control" required placeholder="Masukkan Nama">
 					</div>
+					<!-- jabatan -->
 					<div class="form-group">
 						<label for="role">Jabatan</label>
 						<select name="role" id="role" class="form-control" required="required">
@@ -39,6 +41,7 @@
 							@endforeach
 						</select>
 					</div>
+					<!-- divisi -->
 					<div class="form-group">
 						<label for="divisi">Divisi</label>
 						<select name="id_divisi" id="id_divisi" class="form-control" required="required">
@@ -47,6 +50,7 @@
 							@endforeach
 						</select>
 					</div>
+					
 					<div class="text-right">
 						<button type="submit" class="btn btn-success">Simpan</button>
 					</div>

@@ -42,11 +42,11 @@
         <!-- Menampilkan pesan kesalahan -->
         @if ($errors->any())
             <div class="alert alert-danger">
-                <ul>
+                
                     @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
+                        <b>{{ $error }}</b>
                     @endforeach
-                </ul>
+                </>
             </div>
         @endif
         </span>

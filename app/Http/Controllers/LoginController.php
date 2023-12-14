@@ -20,11 +20,11 @@ class LoginController extends Controller
 
         // role direktur
         if($user->role == "1"){
-            return redirect()->intended("/direktur");
+            return redirect()->intended("/admin");
         }
         // role admin
         elseif($user->role == "2"){
-            return redirect()->intended("/admin");
+            return redirect()->intended("/direktur");
         }
         // role manager
         elseif($user->role == "3"){

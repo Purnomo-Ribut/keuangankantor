@@ -40,7 +40,7 @@ Auth::routes();
 
 // });
 
-Route::prefix("admin")->middleware("auth", "role:2")->group(function(){
+Route::prefix("admin")->middleware("auth", "role:1")->group(function(){
     Route::get('/', 'DashboardController@index')->name('dashboard');
     // divisi
     Route::get("/divisi","DivisiController@index")->name("daftarDivisi");
@@ -73,10 +73,15 @@ Route::prefix("admin")->middleware("auth", "role:2")->group(function(){
     Route::get("/user/{user}/edit","UserController@edit")->name("editUser");
     Route::post("/user/{user}/update", "UserController@update")->name("updateUser");
     Route::get("/user/{user}/delete", "UserController@destroy")->name("deleteUser");
-    
-});
 
-Route::prefix("direktur")->middleware("auth", "role:1")->group(function(){
+    //Profile
+    Route::get("/profile","ProfileController@index")->name("Profile");
+    Route::get("/profile/{profile}/edit","ProfileController@edit")->name("editProfile");
+    Route::post("/profile/{profile}/update", "ProfileController@update")->name("updateProfile");
+    
+}); 
+
+Route::prefix("direktur")->middleware("auth", "role:2")->group(function(){
     Route::get('/', function () {
         return view('direktur.dashboard');
     });

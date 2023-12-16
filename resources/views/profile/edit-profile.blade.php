@@ -29,7 +29,9 @@
       <div class="row no-gutters row-bordered row-border-light">
         <div class="col-md-3 pt-0">
           <div class="list-group list-group-flush account-settings-links">
+            @foreach ($profiles as $profile)
             <a class="list-group-item list-group-item-action active" data-toggle="list" href="{{ route('editProfile', $profile->id)}}#account-general">General</a>
+            @endforeach
             <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password">Change password</a>
           </div>
         </div>
@@ -57,6 +59,7 @@
               <hr class="border-light m-0">
 
               <div class="card-body">
+                @foreach ($profiles as $profile)
                 <form action="{{ route('updateProfile',$profile->id) }}" method="post">
                   @csrf
                     <div class="form-group">
@@ -71,7 +74,7 @@
                     <label class="form-label">No.Telepon</label>
                     <input type="integer" class="form-control" name="nomor_telepon" id="nomor_telepon"  value="{{$profile->nomor_telepon}}">
                   </div>
-
+                  @endforeach
                   <div class="text-right mb-5 mt-3">
                     <button type="submit" class="btn btn-primary">Save changes</button>&nbsp;
                     <button type="submit" class="btn btn-default">Cancel</button>

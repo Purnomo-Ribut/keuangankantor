@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\profile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class ProfileController extends Controller
 {
@@ -14,11 +15,22 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        $profiles = profile::all();
-        return view("profile.edit-profile",[
-            "profiles"=>$profiles
+        $userData = Session::get('userData');
+        $id = $userData->id;
+    
+        // Check if the profile exists
+        $profiles = Profile::find($id);
+    
+        if (!$profiles) {
+            // Handle the case where the profile doesn't exist
+            return redirect(route('Profile'))->withErrors('Profile not found.');
+        }
+    
+        return view("profile.edit-profile", [
+            "profile" => $profiles
         ]);
     }
+    
 
     /**
      * Show the form for creating a new resource.

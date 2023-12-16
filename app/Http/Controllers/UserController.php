@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
-
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Illuminate\Support\Facades\View;
 class UserController extends Controller
 {
     /**
@@ -23,6 +25,23 @@ class UserController extends Controller
             "roles"=>$roles,
             "divisis"=>$divisis,
         ]);
+    }
+    public function cetak()
+    {
+        $users = User::all();
+        $roles = \App\tbl_role::all();
+        $divisis = \App\tbl_divisi::all();
+        // inisialisasi
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isPhpEnabled', true);
+        $pdf = new Dompdf($options);
+        
+        $view = View::make('user.cetak', compact('users', 'roles', 'divisis'))->render();
+        $pdf->loadHtml($view);
+
+        $pdf->render();
+        return $pdf->stream('daftar_pegawai.pdf');
     }
 
     /**

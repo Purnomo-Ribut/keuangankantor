@@ -73,9 +73,13 @@ Route::prefix("admin")->middleware("auth", "role:1")->group(function(){
     Route::get("/user/{user}/edit","UserController@edit")->name("editUser");
     Route::post("/user/{user}/update", "UserController@update")->name("updateUser");
     Route::get("/user/{user}/delete", "UserController@destroy")->name("deleteUser");
+    Route::get("/user/cetak","UserController@cetak")->name("cetakUser");
+    
 
     //Profile
     Route::get("/profile","ProfileController@index")->name("Profile");
+    Route::get("/profile/{profile}/create","ProfileController@create")->name("createProfile");
+    Route::post("/profile/{profile}/store", "ProfileController@store")->name("storeProfile");
     Route::get("/profile/{profile}/edit","ProfileController@edit")->name("editProfile");
     Route::post("/profile/{profile}/update", "ProfileController@update")->name("updateProfile");
     
@@ -87,10 +91,3 @@ Route::prefix("direktur")->middleware("auth", "role:2")->group(function(){
     });
 
 });
-// Route::prefix('direktur')->group(function () {
-//     Route::get('/dashboard', function () {
-//         return view('direktur.dashboard');
-//     });
-// }); //rute direktur sementara
-
-// Route::get('dashboards', 'DashboardController@index')->middleware('admin');

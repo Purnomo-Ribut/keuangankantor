@@ -21,7 +21,6 @@ body{
     background: linear-gradient(45deg,#FF5370,#ff869a);
 }
 
-
 .card {
     border-radius: 5px;
     -webkit-box-shadow: 0 1px 2.94px 0.06px rgba(4,26,55,0.16);
@@ -32,15 +31,27 @@ body{
     transition: all 0.3s ease-in-out;
     cursor: pointer;
 }
+.card-link {
+    text-decoration: none !important; 
+  }
+
+  .card-link:hover {
+    text-decoration: none !important; 
+  }
 .card:hover {
-    transform: scale(1.05);
+    transform: scale(1.02);
   }
 .card .card-block {
     padding: 20px;
 }
 
 .order-card i {
-    font-size: 35px;
+    font-size: 30px;
+}
+
+.order-card .link {
+    font-size: 20px;
+    margin-top: 5px;
 }
 
 .f-left {

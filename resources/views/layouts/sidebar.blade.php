@@ -51,7 +51,7 @@
                 <li class="nav-item">
                     <a href="{{route('daftarKategori')}}" class="nav-link">
                         <i class="nav-icon fa fa-money"></i>
-                        <p>Kategori Keuangan</p>
+                        <p>Kategori</p>
                     </a>
                 </li>
                 <li class="nav-item">

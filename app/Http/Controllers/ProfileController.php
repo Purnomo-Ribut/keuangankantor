@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
@@ -15,19 +17,17 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        $userData = Session::get('userData');
+        $userData = Auth::user();
         $id = $userData->id;
-    
         // Check if the profile exists
-        $profiles = Profile::find($id);
-    
-        if (!$profiles) {
+        $profile = profile::find($id);    
+        if (!$profile) {
             // Handle the case where the profile doesn't exist
             return redirect(route('Profile'))->withErrors('Profile not found.');
         }
     
         return view("profile.edit-profile", [
-            "profile" => $profiles
+            "profile" => $profile
         ]);
     }
     
@@ -53,7 +53,8 @@ class ProfileController extends Controller
         $validasiData = validator($request->all(),[
             "nama"     =>"string|max:255",  
             "alamat"  => "string",  
-            "no_telepon"=>"integer",  
+            "no_telepon"=>"string",
+            
         ])->validate();
         $profile = new profile($validasiData);
         $profile->save();
@@ -79,7 +80,6 @@ class ProfileController extends Controller
      */
     public function edit(profile $profile)
     {
-        dd($profile);
         return view("profile.edit-profile",[
             "profile"=>$profile
         ]);
@@ -94,18 +94,51 @@ class ProfileController extends Controller
      */
     public function update(Request $request, profile $profile)
     {
-        $validasiData = validator($request->all(),[
-            "nama"     =>"string|max:255",  
-            "alamat"  => "string",  
-            "nomor_telepon"=>"integer",  
-            ])->validate();
-        dd($validasiData);
-        $profile->nama=$validasiData["nama"];
-        $profile->alamat=$validasiData["alamat"];
-        $profile->nomor_telepon=$validasiData["nomor_telepon"];
+        $validasiData = validator($request->all(), [
+            "nama"           => "string|max:255",
+            "alamat"         => "string",
+            "nomor_telepon"  => "string",
+            //foto
+            "foto_profil"    => "image|mimes:jpeg,png,jpg,gif|max:2000",
+        ])->validate();
+        if ($request->hasFile('foto_profil')) {
+            $foto_profil = $request->file('foto_profil');
+            $path = $foto_profil->store('img', 'public');
+            $validasiData['foto_profil'] = $path;
+        }
+        
+        $profile->nama = $validasiData["nama"];
+        $profile->alamat = $validasiData["alamat"];
+        $profile->nomor_telepon = $validasiData["nomor_telepon"];
         $profile->save();
-        return redirect(route("Profile"));  
+        session()->flash('success', 'Data berhasil diperbarui');
+        return redirect(route("Profile"));
     }
+
+    //password
+    public function editPassword (){
+        return view("profile.edit-profile");
+    }
+    public function updatePassword(Request $request){
+        $user = Auth::user();
+        
+        $request->validate([
+            "pw_lama"=>"required",
+            "pw_baru"=>"required",
+            "konfirm_pw"=>"required|same:pw_baru"
+
+        ]);
+        // dd($request->all());
+        if(!Hash::check($request->input("pw_lama"), $user->password)){
+            return redirect()->back()->withErrors(["pw_lama"=>"Kata sandi tidak sesuai"]);
+        }
+
+        $user->password = Hash::make($request->input("pw_baru"));
+        $user->save();
+        session()->flash('success', 'Kata sandi berhasil diperbarui');
+        return redirect(route("Profile"));
+    }
+
 
     /**
      * Remove the specified resource from storage.

@@ -29,9 +29,7 @@
       <div class="row no-gutters row-bordered row-border-light">
         <div class="col-md-3 pt-0">
           <div class="list-group list-group-flush account-settings-links">
-            @foreach ($profiles as $profile)
-            <a class="list-group-item list-group-item-action active" data-toggle="list" href="{{ route('editProfile', $profile->id)}}#account-general">General</a>
-            @endforeach
+            <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account-general">General</a>
             <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password">Change password</a>
           </div>
         </div>
@@ -40,18 +38,22 @@
             <div class="tab-pane fade active show" id="account-general">
 
             <div class="card-body media align-items-center">
-              <form action="" method="post">
+              <form action="{{ route('updateProfile',$profile->id) }}" method="post" enctype="multipart/form-data">
                 <div class="row">
                   <div class="col-md-3 text-center">
-                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" class="d-block ui-w-80">
+                    <img src="{{ asset($profile->foto_profil) }}" alt="" class="d-block ui-w-80">
                   </div>
-                  <div class="col-md-6 d-flex align-items-center">
+                  <!-- <div class="col-md-6 d-flex align-items-center">
                     <label class="btn btn-outline-primary">
                       Upload Foto
-                      <input type="file" class="account-settings-fileinput" style="display: none;">
+                      <input type="file" name="foto_profil"class="account-settings-fileinput" style="display: none;">
                     </label>
                     <button type="button" class="btn btn-default md-btn-flat ml-2">Reset</button>
-                  </div>
+                  </div> -->
+                  <div class="mb-3">
+                    <label for="formFile" class="form-label">Upload File</label>
+                    <input class="form-control" type="file" id="formFile" name="foto_profil">
+                </div>
                     <div class="text-light small ml-3">Allowed JPG, GIF, or PNG. Max size of 800K</div>
                 </div>
               </form>
@@ -59,25 +61,24 @@
               <hr class="border-light m-0">
 
               <div class="card-body">
-                @foreach ($profiles as $profile)
                 <form action="{{ route('updateProfile',$profile->id) }}" method="post">
                   @csrf
                     <div class="form-group">
                       <label class="form-label">Nama</label>
-                      <input type="text" class="form-control" name="nama" id="nama" value="{{$profile->nama}}">
+                      <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukkan Nama" value="{{$profile->nama}}">
                     </div>
                     <div class="form-group">
                       <label class="form-label">Alamat</label>
-                      <textarea class="form-control" rows="5" name="alamat" id="alamat">{{ $profile->alamat }}</textarea>
+                      <textarea class="form-control" rows="5" name="alamat" id="alamat" placeholder="Masukkan Alamat">{{ $profile->alamat }}</textarea>
                     </div>
                     <div class="form-group">
                     <label class="form-label">No.Telepon</label>
-                    <input type="integer" class="form-control" name="nomor_telepon" id="nomor_telepon"  value="{{$profile->nomor_telepon}}">
+                    <input type="number" class="form-control" name="nomor_telepon" id="nomor_telepon" placeholder="Masukkan No. Telepon"  value="{{$profile->nomor_telepon}}">
                   </div>
-                  @endforeach
                   <div class="text-right mb-5 mt-3">
-                    <button type="submit" class="btn btn-primary">Save changes</button>&nbsp;
-                    <button type="submit" class="btn btn-default">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>&nbsp;
+                    <a href="{{ route('dashboard') }}" class="btn btn-default">Batal</a>
+                    <!-- <button type="button" class="btn btn-default">Cancel</button> -->
                   </div>
 
                 </form>
@@ -87,25 +88,49 @@
             </div>
             <div class="tab-pane fade" id="account-change-password">
               <div class="card-body pb-2">
-                <form action="">
+                <form action="{{ route('updatePassword')}}" method="post">
+                  @csrf
                   <div class="form-group">
-                    <label class="form-label">Current password</label>
-                    <input type="password" class="form-control">
-                  </div>
-  
-                  <div class="form-group">
-                    <label class="form-label">New password</label>
-                    <input type="password" class="form-control">
-                  </div>
-  
-                  <div class="form-group">
-                    <label class="form-label">Repeat new password</label>
-                    <input type="password" class="form-control">
-                  </div>
+                    <label class="form-label">Password Sekarang</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" name="pw_lama" id="pw_lama">
+                        <div class="input-group-append">
+                            <span class="input-group-text toggle-password" data-target="pw_lama">
+                                <i class="fa fa-eye-slash"></i>
+                            </span>
+                        </div>
+                    </div>
+                    @error('pw_lama')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password Baru</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" name="pw_baru" id="pw_baru">
+                        <div class="input-group-append">
+                            <span class="input-group-text toggle-password" data-target="pw_baru">
+                                <i class="fa fa-eye-slash"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Konfirmasi password</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" name="konfirm_pw" id="konfirm_pw">
+                        <div class="input-group-append">
+                            <span class="input-group-text toggle-password" data-target="konfirm_pw">
+                                <i class="fa fa-eye-slash"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
 
                   <div class="text-right mb-5 mt-3">
                     <button type="submit" class="btn btn-primary">Save changes</button>&nbsp;
-                    <button type="submit" class="btn btn-default">Cancel</button>
                   </div>
 
                 </form>
@@ -119,4 +144,27 @@
     
   </div>
 
+@endsection
+
+@section("addJavascript")
+<script src="https://kit.fontawesome.com/e2b0e4079e.js" crossorigin="anonymous"></script>
+<script>
+          document.querySelectorAll('.toggle-password').forEach(function (element) {
+            element.addEventListener('click', function () {
+                var targetId = this.getAttribute('data-target');
+                togglePassword(targetId);
+            });
+        });
+
+        function togglePassword(inputId) {
+            var inputElement = document.getElementById(inputId);
+            var type = inputElement.getAttribute('type');
+            if (type === 'password') {
+                inputElement.setAttribute('type', 'text');
+            } else {
+                inputElement.setAttribute('type', 'password');
+            }
+        }
+
+</script>
 @endsection

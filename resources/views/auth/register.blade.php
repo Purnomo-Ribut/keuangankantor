@@ -60,15 +60,11 @@
             </span>
             @enderror --}}
                 <div class="input-group mb-1">
-                    @php
-                        $role = App\User::get(); 
-                    @endphp
                     <select id="role" class="form-control @error('role') is-invalid @enderror" name="role"
                         value="{{ old('role') }}" required autocomplete="role">
-                        @foreach
-                            <option value="{{ $role->id_role }}">{{ $role->role }}</option>
-                            <option value="" hidden></option>
-                        @endforeach
+                        <option value="direktur">Direktur</option>
+                        <option value="manager">Manager</option>
+                        <option value="karyawan">karyawan</option>
                     </select>
                     @error('role')
                         <span class="invalid-feedback" role="alert">

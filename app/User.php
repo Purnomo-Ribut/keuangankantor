@@ -19,9 +19,6 @@ class User extends Authenticatable
 
     // Model User
     // protected $fillable = ['id_divisi', 'nama', 'role'];
-    // Model User
-    protected $fillable = ['nama', 'role', 'id_divisi', 'username', 'password'];
-
 
 
     protected $guarded = [

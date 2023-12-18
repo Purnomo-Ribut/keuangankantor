@@ -21,16 +21,12 @@
     <!-- Main content -->
     <div class="content">
         <div class="container-fluid">
-            <div class="d-flex justify-content-center">                
-        <div class="container-fluid"> <!-- content from here -->
             {{-- card grafik --}}
             <div class="card">
                 <div class="card-header border-0">
-                    <h3 class="card-title text-bold text-lg">Grafik Keuangan Perusahaan</h3>
+                    <h3 class="card-title text-bold text-lg text-center">Grafik Keuangan Karyawan</h3>
                     <div class="card-tools">
-                        <!-- Buttons, labels, and many other things can be placed here! -->
-                        <!-- Here is a label for example -->
-                        <span class="badge badge-primary">Label</span>
+                        <span class="badge badge-info">{{ date('Y') }}</span>
                     </div>
                 </div>
                 <div class="card-body">
@@ -39,7 +35,9 @@
                             <div class="card border-3">
                                 <div class="card-header border-0 pb-0">
                                     <div class="d-flex justify-content-end">
-                                        <a href="javascript:void(0);">View Report</a>
+                                        <a href="">View Report</a>
+                                    </div>
+                                    <div class="card-tools">
                                     </div>
                                 </div>
                                 <div class="card-body pt-3">
@@ -47,21 +45,20 @@
                                         <p class="d-flex flex-column">
                                             <span class="text-bold text-lg">Rp.
                                                 {{ number_format($pemasukanMingguan, 2, ',', '.') }}</span>
-                                            <span>Pemasukan Seiring Waktu</span>
+                                            <span class="text-sm">Pemasukan Karyawan Seiring Waktu</span>
                                         </p>
                                         <p class="ml-auto d-flex flex-column text-right">
-                                            <span class="{{ ($persentasePerbandingan > 0) ? 'text-success' : 'text-danger' }}">
-                                                <i class="fa {{ ($persentasePerbandingan > 0) ? 'fa-arrow-up' : 'fa-arrow-down' }}"></i>
-                                                {{ number_format($persentasePerbandingan, 2) }} %
+                                            <span
+                                                class="{{ $perbandinganPemasukanPengeluaranMingguan > 0 ? 'text-success' : 'text-danger' }}">
+                                                <i
+                                                    class="fa {{ $perbandinganPemasukanPengeluaranMingguan > 0 ? 'fa-arrow-up' : 'fa-arrow-down' }}"></i>
+                                                {{ number_format($perbandinganPemasukanPengeluaranMingguan, 2) }} %
                                             </span>
                                             <span class="text-muted">Sejak minggu terakhir</span>
                                             <span class="text-muted">{{ $tanggalMingguan }}</span>
                                         </p>
                                     </div>
                                     <!-- /.d-flex -->
-
-
-
                                     <div class="position-relative mb-4">
                                         <canvas id="visitors-chart" height="200"></canvas>
                                     </div>
@@ -71,7 +68,7 @@
                                             <i class="fa fa-square text-primary"></i> Pemasukan
                                         </span>
 
-                                        <span>                                        
+                                        <span>
                                             <i class="fa fa-square text-gray" style="opacity: 23%"></i> Pengeluaran
                                         </span>
                                     </div>
@@ -84,19 +81,24 @@
                                     <div class="d-flex justify-content-end">
                                         <a href="javascript:void(0);">View Report</a>
                                     </div>
+                                    <div class="card-tools">
+                                    </div>
                                 </div>
                                 <div class="card-body pt-3">
                                     <div class="d-flex">
                                         <p class="d-flex flex-column">
                                             <span class="text-bold text-lg">Rp.
                                                 {{ number_format($pemasukanBulanan, 2, ',', '.') }}</span>
-                                            <span>Pemasukan Seiring Waktu</span>
+                                            <span class="text-sm">Pemasukan Karyawan Seiring Waktu</span>
                                         </p>
                                         <p class="ml-auto d-flex flex-column text-right">
-                                            <span class="text-success">
-                                                <i class="fa fa-arrow-up"></i> 33.1%
+                                            <span
+                                                class="{{ $perbandinganPemasukanPengeluaranBulanan > 0 ? 'text-success' : 'text-danger' }}">
+                                                <i
+                                                    class="fa {{ $perbandinganPemasukanPengeluaranBulanan > 0 ? 'fa-arrow-up' : 'fa-arrow-down' }}"></i>
+                                                {{ number_format($perbandinganPemasukanPengeluaranBulanan, 2) }}%
                                             </span>
-                                            <span class="text-muted">Sejak 1 bulan terakhir</span>
+                                            <span class="text-muted">Di Bulan ini</span>
                                             <span class="text-muted">{{ $tanggalBulanan }}</span>
                                         </p>
                                     </div>
@@ -131,8 +133,8 @@
                         <div class="col-sm-3 col-6">
                             <div class="description-block border-right">
                                 <span class="description-percentage text-success"><i class="fa fa-caret-up"></i>
-                                    17%</span>
-                                <h5 class="description-header">Rp. {{ $totalPemasukan }}</h5>
+                                    {{ number_format($perbandinganPemasukanPengeluaranTotal, 2) }}%</span>
+                                <h5 class="description-header">Rp. {{ number_format($totalPemasukan, 2, ',', '.') }}</h5>
                                 <span class="description-text">TOTAL PENDAPATAN</span>
                             </div>
                             <!-- /.description-block -->
@@ -141,8 +143,8 @@
                         <div class="col-sm-3 col-6">
                             <div class="description-block border-right">
                                 <span class="description-percentage text-warning"><i class="fa fa-caret-left"></i>
-                                    0%</span>
-                                <h5 class="description-header">$10,390.90</h5>
+                                    {{ 100 - number_format($perbandinganPemasukanPengeluaranTotal, 2) }}%</span>
+                                <h5 class="description-header">Rp. {{ number_format($totalPengeluaran, 2, ',', '.') }}</h5>
                                 <span class="description-text">TOTAL BIAYA</span>
                             </div>
                             <!-- /.description-block -->
@@ -150,9 +152,12 @@
                         <!-- /.col -->
                         <div class="col-sm-3 col-6">
                             <div class="description-block border-right">
-                                <span class="description-percentage text-success"><i class="fa fa-caret-up"></i>
-                                    20%</span>
-                                <h5 class="description-header">$24,813.53</h5>
+                                <span
+                                    class="description-percentage {{ $perbandinganPemasukanPengeluaranTotal > 0 ? 'text-success' : 'text-danger' }}"><i
+                                        class="fa {{ $perbandinganPemasukanPengeluaranTotal > 0 ? 'fa-caret-up' : 'fa-caret-down' }}"></i>
+                                    {{ number_format($perbandinganPemasukanPengeluaranTotal, 2) }}%</span>
+                                <h5 class="description-header">
+                                    {{ number_format($totalPemasukan - $totalPengeluaran, 2, ',', '.') }}</h5>
                                 <span class="description-text">TOTAL KEUNTUNGAN</span>
                             </div>
                             <!-- /.description-block -->
@@ -161,8 +166,8 @@
                         <div class="col-sm-3 col-6">
                             <div class="description-block">
                                 <span class="description-percentage text-danger"><i class="fa fa-caret-down"></i>
-                                    18%</span>
-                                <h5 class="description-header">1200</h5>
+                                    -%</span>
+                                <h5 class="description-header">NULL</h5>
                                 <span class="description-text">REALISASI ANGGARAN</span>
                             </div>
                             <!-- /.description-block -->
@@ -181,13 +186,12 @@
     <script src="{{ asset('js/Chart.js') }}"></script>
     {{-- <script src="{{ asset('js/dashboard3.js') }}"></script> --}}
 
-    <script>
-        // var pemasukanHarians = @json($pemasukanHarians);
-        // console.log(pemasukanHarians);
-        // pemasukanHarians.forEach((element) => {
-        //     console.log(element);
-        // });
-    </script>
+    {{-- <script>
+        var pemasukanHarians = @json($pemasukanHarians);        
+        pemasukanHarians.forEach((element) => {
+            console.log(element);
+        });
+    </script> --}}
 
     <script>
         /* global Chart:false */
@@ -206,13 +210,40 @@
             var pemasukanHarians = @json($pemasukanHarians);
             pemasukanHarians.forEach((element, index) => {
                 pemasukanHarians.push(element);
-                console.log(element);
             });
 
-            var tanggalHarians = @json($tanggalHarians);
-            tanggalHarians.forEach((element, index) => {
-                tanggalHarians.push(element);
+            var pengeluaranHarians = @json($pengeluaranHarians);
+            pengeluaranHarians.forEach((element, index) => {
+                pengeluaranHarians.push(element);
             });
+
+            var pemasukanBulanans = @json($pemasukanBulanans);
+            for (const key in pemasukanBulanans) {
+                if (pemasukanBulanans.hasOwnProperty(key)) {
+                    const element = pemasukanBulanans[key];
+                }
+            }
+
+            var pengeluaranBulanans = @json($pengeluaranBulanans);
+            for (const key in pengeluaranBulanans) {
+                if (pengeluaranBulanans.hasOwnProperty(key)) {
+                    const element = pengeluaranBulanans[key];
+                }
+            }
+
+            var tanggalHarians = @json($tanggalHarians);
+            for (const key in tanggalHarians) {
+                if (tanggalHarians.hasOwnProperty(key)) {
+                    const element = tanggalHarians[key];
+                }
+            }
+
+            var tanggalBulanans = @json($tanggalBulanans);
+            for (const key in tanggalBulanans) {
+                if (tanggalBulanans.hasOwnProperty(key)) {
+                    const element = tanggalBulanans[key];
+                }
+            }
 
             var $visitorsChart = $('#visitors-chart')
             // eslint-disable-next-line no-unused-vars
@@ -237,7 +268,10 @@
                         },
                         {
                             type: 'line',
-                            data: [60, 80, 70, 67, 80, 77, 100],
+                            data: [pengeluaranHarians[0], pengeluaranHarians[1], pengeluaranHarians[2],
+                                pengeluaranHarians[3], pengeluaranHarians[4], pengeluaranHarians[5],
+                                pengeluaranHarians[6]
+                            ],
                             backgroundColor: 'tansparent',
                             borderColor: '#ced4da',
                             pointBorderColor: '#ced4da',
@@ -300,16 +334,24 @@
             var salesChart = new Chart($salesChart, {
                 type: 'bar',
                 data: {
-                    labels: ['JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+                    labels: [tanggalBulanans[6], tanggalBulanans[5], tanggalBulanans[4], tanggalBulanans[3],
+                        tanggalBulanans[2], tanggalBulanans[1], tanggalBulanans[0]
+                    ],
                     datasets: [{
                             backgroundColor: '#007bff',
                             borderColor: '#007bff',
-                            data: [1000, 2000, 3000, 2500, 2700, 2500, 3000]
+                            data: [pemasukanBulanans[6], pemasukanBulanans[5], pemasukanBulanans[4],
+                                pemasukanBulanans[3], pemasukanBulanans[2], pemasukanBulanans[1],
+                                pemasukanBulanans[0]
+                            ]
                         },
                         {
                             backgroundColor: '#ced4da',
                             borderColor: '#ced4da',
-                            data: [700, 1700, 2700, 2000, 1800, 1500, 2000]
+                            data: [pengeluaranBulanans[6], pengeluaranBulanans[5], pengeluaranBulanans[
+                                    4], pengeluaranBulanans[3], pengeluaranBulanans[2],
+                                pengeluaranBulanans[1], pengeluaranBulanans[0]
+                            ]
                         }
                     ]
                 },
@@ -338,21 +380,21 @@
                             ticks: $.extend({
                                 beginAtZero: true,
 
-                                // Include a dollar sign in the ticks
                                 callback: function(value) {
                                     if (value >= 1000) {
-                                        value /= 1000
-                                        value += 'k'
+                                        value /= 1000;
+                                        value += 'k';
+                                        // value = value.toLocaleString("id-ID");
                                     }
 
-                                    return '$' + value
+                                    return 'Rp. ' + value
                                 }
                             }, ticksStyle)
                         }],
                         xAxes: [{
                             display: true,
                             gridLines: {
-                                display: false
+                                display: true
                             },
                             ticks: ticksStyle
                         }]

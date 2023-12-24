@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0 text-dark">Dashboard Direktur</h1>
+                    <h1 class="m-0 text-dark">{{$greeting}}, {{ Auth::user()->nama }}</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -35,7 +35,7 @@
                             <div class="card border-3">
                                 <div class="card-header border-0 pb-0">
                                     <div class="d-flex justify-content-end">
-                                        <a href="">View Report</a>
+                                        {{-- <a href="">View Report</a> --}}
                                     </div>
                                     <div class="card-tools">
                                     </div>
@@ -45,7 +45,7 @@
                                         <p class="d-flex flex-column">
                                             <span class="text-bold text-lg">Rp.
                                                 {{ number_format($pemasukanMingguan, 2, ',', '.') }}</span>
-                                            <span class="text-sm">Pemasukan Karyawan Seiring Waktu</span>
+                                            <span class="text-sm">Pemasukan Karyawan di minggu ini</span>
                                         </p>
                                         <p class="ml-auto d-flex flex-column text-right">
                                             <span
@@ -79,7 +79,7 @@
                             <div class="card">
                                 <div class="card-header border-0 pb-0">
                                     <div class="d-flex justify-content-end">
-                                        <a href="javascript:void(0);">View Report</a>
+                                        {{-- <a href="javascript:void(0);">View Report</a> --}}
                                     </div>
                                     <div class="card-tools">
                                     </div>
@@ -135,7 +135,7 @@
                                 <span class="description-percentage text-success"><i class="fa fa-caret-up"></i>
                                     {{ number_format($perbandinganPemasukanPengeluaranTotal, 2) }}%</span>
                                 <h5 class="description-header">Rp. {{ number_format($totalPemasukan, 2, ',', '.') }}</h5>
-                                <span class="description-text">TOTAL PENDAPATAN</span>
+                                <span class="description-text">TOTAL PEMASUKAN KARYAWAN</span>
                             </div>
                             <!-- /.description-block -->
                         </div>
@@ -145,7 +145,7 @@
                                 <span class="description-percentage text-warning"><i class="fa fa-caret-left"></i>
                                     {{ 100 - number_format($perbandinganPemasukanPengeluaranTotal, 2) }}%</span>
                                 <h5 class="description-header">Rp. {{ number_format($totalPengeluaran, 2, ',', '.') }}</h5>
-                                <span class="description-text">TOTAL BIAYA</span>
+                                <span class="description-text">TOTAL BIAYA KARYAWAN</span>
                             </div>
                             <!-- /.description-block -->
                         </div>
@@ -153,21 +153,22 @@
                         <div class="col-sm-3 col-6">
                             <div class="description-block border-right">
                                 <span
-                                    class="description-percentage {{ $perbandinganPemasukanPengeluaranTotal > 0 ? 'text-success' : 'text-danger' }}"><i
-                                        class="fa {{ $perbandinganPemasukanPengeluaranTotal > 0 ? 'fa-caret-up' : 'fa-caret-down' }}"></i>
+                                    class="description-percentage {{ $perbandinganPemasukanPengeluaranTotal > 0 ? 'text-success' : 'text-danger' }}">
+                                    {{-- <i class="fa {{ $perbandinganPemasukanPengeluaranTotal > 0 ? 'fa-caret-up' : 'fa-caret-down' }}"></i> --}}
+                                    <i class="fa fa-caret-up"></i>
                                     {{ number_format($perbandinganPemasukanPengeluaranTotal, 2) }}%</span>
-                                <h5 class="description-header">
+                                <h5 class="description-header">Rp. 
                                     {{ number_format($totalPemasukan - $totalPengeluaran, 2, ',', '.') }}</h5>
-                                <span class="description-text">TOTAL KEUNTUNGAN</span>
+                                <span class="description-text">SELISIH</span>
                             </div>
                             <!-- /.description-block -->
                         </div>
                         <!-- /.col -->
                         <div class="col-sm-3 col-6">
                             <div class="description-block">
-                                <span class="description-percentage text-danger"><i class="fa fa-caret-down"></i>
-                                    -%</span>
-                                <h5 class="description-header">NULL</h5>
+                                <span class="description-percentage {{ $perbandinganAnggaran > 100 ? 'text-danger' : 'text-success' }}">{{ number_format($perbandinganAnggaran, 2) }}
+                                    %</span>
+                                <h5 class="description-header">{{ $realisasiAnggaran }}</h5>
                                 <span class="description-text">REALISASI ANGGARAN</span>
                             </div>
                             <!-- /.description-block -->

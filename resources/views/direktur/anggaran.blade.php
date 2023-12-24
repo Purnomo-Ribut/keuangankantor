@@ -27,15 +27,17 @@
         <div class="container-fluid">
             <div class="row">
                 {{-- main content here --}}
-                <div class="card col-lg-6" style="height: 300px">
+                {{-- table --}}
+                <div class="card col-lg-6">
                     <div class="card-header border-0">
                         <h3 class="card-title">Anggaran</h3>
                         <div class="card-tools">
                             {{-- tools --}}
+                            <span class="badge badge-info">{{ date('F') }}</span>
                         </div>
                     </div>
                     <div class="card-body">
-                        <table class="table table-hover mb-0" id="data-table-divisi">
+                        <table class="table table-hover" id="data-table-divisi">
                             <thead>
                                 <tr class="text-center">
                                     <th class="col-1">No</th>
@@ -56,13 +58,14 @@
                                             {{ number_format($anggaran->rencana_anggaran, 2, ',', '.') }}</td>
                                         <td class="text-right">Rp.
                                             {{ number_format($anggaran->aktualisasi_anggaran, 2, ',', '.') }}</td>
-                                        <td class="text-center">{{ $anggaran->tgl_anggaran }}</td>
+                                        <td class="text-center">{{  (new DateTime($anggaran->tgl_anggaran))->format('d-m-Y') }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
                 </div>
+                {{-- chart --}}
                 <div class="col-lg-6">
                     <div class="card border-3">
                         <div class="card-header border-0 pb-0">
@@ -74,18 +77,19 @@
                             <div class="d-flex">
                                 <p class="d-flex flex-column">
                                     <span
-                                        class="text-bold text-lg {{ $aktualisasiBulanans[0] - $rencanaBulanans[0] >= 0 ? 'text-danger' : ' text-success' }}"><i
-                                            class="fa {{ $aktualisasiBulanans[0] - $rencanaBulanans[0] >= 0 ? 'fa-plus' : ' fa-minus' }} mr-lg-1"></i>Rp.
-                                        {{ number_format($aktualisasiBulanans[0] - $rencanaBulanans[0], 2, ',', '.') }}
+                                        class="text-bold text-lg {{ $aktualisasiBulanans[0] - $rencanaBulanans[0] >= 0 ? 'text-danger' : ' text-success' }}"><b
+                                            class="mr-lg-1">{{ $aktualisasiBulanans[0] - $rencanaBulanans[0] >= 0 ? '+' : '-' }}</b>Rp.
+                                        {{ number_format(abs($aktualisasiBulanans[0] - $rencanaBulanans[0]), 2, ',', '.') }}
                                     </span>
                                     <span class="text-sm">Dari rencana</span>
                                 </p>
                                 <p class="ml-auto d-flex flex-column text-right">
-                                    <span class="{{ ($perbandinganAnggaran >= 0) ? 'text-danger' : 'text-success' }}">
-                                        <i class="fa {{ ($perbandinganAnggaran >= 0) ? 'fa-arrow-up' : 'fa-arrow-down' }} "></i>
+                                    <span class="{{ $perbandinganAnggaran >= 0 ? 'text-danger' : 'text-success' }}">
+                                        <i
+                                            class="fa {{ $perbandinganAnggaran >= 0 ? 'fa-arrow-up' : 'fa-arrow-down' }} "></i>
                                         {{ number_format($perbandinganAnggaran, 2) }} %
                                     </span>
-                                    <span class="text-muted">Keuntungan di bulan ini</span>
+                                    <span class="text-muted">Di bulan ini</span>
                                 </p>
                             </div>
                             <!-- /.d-flex -->

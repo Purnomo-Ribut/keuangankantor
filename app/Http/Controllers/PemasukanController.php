@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+
 
 
 class PemasukanController extends Controller
@@ -21,23 +23,41 @@ class PemasukanController extends Controller
      */
     public function index(Request $tampil)
     {
+        $time = new Carbon();
+        $time->setTimeZone('Asia/Jakarta');
+
+        $user = Auth::user();
+        $id_user = $user->id;
         // $pemasukans = tbl_pemasukan::with('kategori')->where('status', '1')->get();
-        $kategori = tbl_kategori::all();
+        $kategori = tbl_kategori::all()->where('id_kategori', '<>', 8);
         //filter tanggal
-        $startDate = $tampil->input('start_date', now()->subMonth()->startOfDay());
-        $endDate = $tampil->input('end_date', now()->endOfDay());
+        $startDate = $tampil->input('start_date', now()->startOfMonth());
+        $endDate = $tampil->input('end_date', now()->endOfMonth());
+        $start_date = $time->now()->startOfMonth();
+        $end_date = $time->now()->endOfMonth();
     
         $pemasukans = tbl_pemasukan::with('kategori')
             ->where('status', '1')
+            ->where('id_user', $id_user)
             ->whereBetween('tgl_pemasukan', [$startDate, $endDate])
             ->get();
-            // dd($startDate, $endDate);
-        return view('pemasukan.index', compact('pemasukans', 'kategori'));
+        $total =$pemasukans->sum("jml_masuk");
+        
+        return view('pemasukan.index', [
+            // 'dump' => dd($start_date),
+            'pemasukans' => $pemasukans, 
+            'kategori' => $kategori, 
+            'total' => $total, 
+            'start_date' => $start_date->format('Y-m-d'),
+            'end_date' => $end_date->format('Y-m-d'),
+        ]);
+        // return view('pemasukan.index', compact('pemasukans', 'kategori', 'total', 'start_date', 'end_date'));
     }
 
     //cetak
         public function cetak(Request $cetak)
         {
+            $user = Auth::user()->id;
             // $pemasukans = tbl_pemasukan::with('kategori')->where('status', '1')->get();
             $kategori = tbl_kategori::all();
             //filter tanggal
@@ -45,10 +65,12 @@ class PemasukanController extends Controller
             $endDate = $cetak->input('end_date', now()->endOfDay());
         
             $pemasukans = tbl_pemasukan::with('kategori')
-                ->where('status', '1')
+                ->where('status', '1')->where('id_user', $user)
                 ->whereBetween('tgl_pemasukan', [$startDate, $endDate])
                 ->orderBy('tgl_pemasukan')
                 ->get();
+            $total =$pemasukans->sum("jml_masuk");
+            
             
             // inisialisasi
             $options = new Options();
@@ -56,7 +78,7 @@ class PemasukanController extends Controller
             $options->set('isPhpEnabled', true);
             $pdf = new Dompdf($options);
             
-            $view = View::make('pemasukan.cetak', compact('pemasukans', 'kategori','startDate', 'endDate'))->render();
+            $view = View::make('pemasukan.cetak', compact('pemasukans', 'kategori','startDate', 'endDate',"total"))->render();
             $pdf->loadHtml($view);
 
             $pdf->render();
@@ -137,20 +159,10 @@ class PemasukanController extends Controller
             'id_user_edit' => 'required|integer',
             'tgl_pemasukan' => 'required|string',
             'jml_masuk' => 'required|string|max:255',
-            'bukti_pemasukan' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'catatan' => 'nullable|string',
             'status' => 'nullable',
         ]);
-        if ($request->hasFile('bukti_pemasukan')) {
-            // Delete the old file
-            Storage::delete('bukti_pemasukan/' . $pemasukan->bukti_pemasukan);
-    
-            // Upload and save the new file
-            $file = $request->file('bukti_pemasukan');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $filePath = $file->storeAs('bukti_pemasukan', $fileName, 'public');
-            $pemasukan->bukti_pemasukan = $fileName;
-        }
+
         $pemasukan->id_kategori = $validatedData['id_kategori'];
         $pemasukan->id_user = $validatedData['id_user'];
         $pemasukan->id_user_create = $validatedData['id_user_create'];

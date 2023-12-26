@@ -12,9 +12,17 @@
         @auth
             <!-- Sidebar user panel (optional) -->
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                <div class="image">
-                    <img src="{{ asset('storage/' . Auth()->user()->foto_profil) }}" class="img-circle elevation-2" alt="User Image">
-                </div>
+                @if (Auth()->user()->foto_profil == '' && file_exists(public_path('storage/' . Auth()->user()->foto_profil)))
+                    <div class="image">
+                        <img src="{{ asset('img/user-photo-default.png') }}" class="img-circle elevation-2"
+                            alt="User Image">
+                    </div>
+                @else
+                    <div class="image">
+                        <img src="{{ asset('storage/' . Auth()->user()->foto_profil) }}" class="img-circle elevation-2"
+                            alt="User Image">
+                    </div>
+                @endif
                 <div class="info">
                     <a href="{{ route('indexProfile') }}" class="d-block">{{ Auth::user()->nama }}</a>
                 </div>
@@ -26,25 +34,25 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
                 <li class="nav-item">
-                    <a href="/direktur/dashboard" class="nav-link">
+                    <a href="{{ route('dashboardDirektur') }}" class="nav-link">
                         <i class="nav-icon fa fa-dashboard"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/direktur/cashflow" class="nav-link">
+                    <a href="{{ route('mutasiDirektur') }}" class="nav-link">
                         <i class="nav-icon fa fa-file-text-o"></i>
                         <p>Mutasi Keuangan</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/direktur/anggaran" class="nav-link">
-                        <i class="nav-icon fa fa-money"></i>
+                    <a href="{{ route('anggaranDirektur') }}" class="nav-link">
+                        <i class="nav-icon fa fa-briefcase"></i>
                         <p>Anggaran</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/direktur/karyawan" class="nav-link">
+                    <a href="{{ route('karyawanDirektur') }}" class="nav-link">
                         <i class="nav-icon fa fa-users"></i>
                         <p>Karyawan</p>
                     </a>

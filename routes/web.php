@@ -27,14 +27,10 @@ Route::group(['middleware' => 'guest'], function () {
 
     // ke halaman reset password 
     route::post("/update-pass","LoginController@resetpass")->name("password.update");
-
-<<<<<<< HEAD
-    route::get("/dashboard","LoginController@login" )->name("indexreset");
-=======
+    // route::get("/dashboard","LoginController@login" )->name("indexreset");
     // halaman login 
     route::get("/dashboard","LoginController@login" )->name("indexreset");
     
->>>>>>> 350b15d5ff89b6061e351b8f3d6173e599ae2d23
 });
 
 
@@ -104,17 +100,17 @@ Route::prefix("admin")->middleware("auth", "role:1")->group(function(){
 
 
 Route::prefix('direktur')->middleware("auth", "role:2")->group(function () {
-    Route::redirect('/', 'direktur/dashboard');
-    Route::get('/dashboard', 'DirekturController@dashboard');
-    Route::get('/cashflow', 'DirekturController@cashflow');
-    Route::get('/anggaran', 'DirekturController@anggaran');
-    Route::get('/karyawan', 'DirekturController@karyawan');
+    Route::redirect('', '/direktur/dashboard');    
 
-    Route::get('/cashflow/{id}/data', 'DirekturController@cashflowDivisi')->name('cashflowDivisi');    
-    // Route::get('/karyawan/{id}', 'DirekturController@karyawan');
+    Route::get('/dashboard', 'DirekturController@dashboard')->name("dashboardDirektur");
+    Route::get('/mutasi', 'DirekturController@mutasi')->name('mutasiDirektur');
+    Route::get('/anggaran', 'DirekturController@anggaran')->name("anggaranDirektur");
+    Route::get('/karyawan', 'DirekturController@karyawan')->name("karyawanDirektur");
+
+    Route::get('/mutasi/{id}/data', 'DirekturController@mutasiDivisi')->name('mutasiDivisi');
 
     //cetak
-    Route::get("/cashflow/karyawan/cetak","DirekturController@mutasiKaryawanCetak")->name("cetakMutasiKaryawanDirektur");
+    Route::get("/mutasi/karyawan/cetak","DirekturController@mutasiKaryawanCetak")->name("cetakMutasiKaryawanDirektur");
 });
 
 Route::prefix('manajer')->middleware("auth", "role:3")->group(function () {
@@ -139,8 +135,8 @@ Route::prefix('manajer')->middleware("auth", "role:3")->group(function () {
     //CRUD Mutasi
     Route::get("/mutasi","MutasiController@index")->name("daftarMutasi");
     Route::post("/mutasi/tambah","MutasiController@store")->name("storeSaldo");
-    Route::post("/mutasi/{pemasukan}/update","MutasiController@updatePemasukan")->name("mutasiPemasukan");
-    Route::post("/mutasi/{pengeluaran}/update","MutasiController@updatePengeluaran")->name("mutasiPengeluaran");
+    Route::post("/mutasi/{pemasukan}/updatePemasukan","MutasiController@updatePemasukan")->name("mutasiPemasukan");
+    Route::post("/mutasi/{pengeluaran}/updatePengeluaran","MutasiController@updatePengeluaran")->name("mutasiPengeluaran");
     Route::post("/mutasi/{pengeluaran}/deletePengeluaran","MutasiController@destroyPengeluaran")->name("deleteMutasiPengeluaran");
     Route::post("/mutasi/{pemasukan}/deletePemasukan","MutasiController@destroyPemasukan")->name("deleteMutasiPemasukan");
     Route::get('/view-bukti/{id}', 'MutasiController@viewBukti')->name('viewBukti');

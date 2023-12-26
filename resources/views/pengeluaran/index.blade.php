@@ -1,10 +1,3 @@
-@php
-function formatRupiah($angka){
-$rupiah = "Rp. " . number_format($angka,0,',','.');
-return $rupiah;
-}
-@endphp
-
 @extends('karyawan.layouts.master')
 
 @section("addCss")
@@ -39,7 +32,7 @@ return $rupiah;
                 <a href="{{ route('createPengeluaran') }}" class="btn btn-primary" role="button" data-toggle="modal"
                     data-target="#tambahPengeluaranModal">Tambah Data</a>
                 <a href="{{ route('cetakPengeluaran', ['start_date' => request('start_date'), 'end_date' => request('end_date')]) }}"
-                    class="btn btn-success mx-1" role="button">Export PDF <i class="fa fa-file-pdf"></i></a>
+                    class="btn btn-success mx-1" role="button">Export PDF <i class="fa fa-file-pdf-o"></i></a>
             </div>
             <div class="card-body">
                 <form method="get" action="{{ route('daftarPengeluaran') }}" class="mb-3">
@@ -56,7 +49,7 @@ return $rupiah;
                         </div>
                         <div class="col-md-4">
                             <label class="d-block invisible">Filter</label>
-                            <button type="submit" class="btn btn-primary">Filter</button>
+                            <button type="submit" class="btn btn-primary fa fa-filter"></button>
                         </div>
                     </div>
                 </form>
@@ -69,7 +62,7 @@ return $rupiah;
                             <th>Kategori</th>
                             <th>Nominal</th>
                             <th>Catatan</th>
-                            <th class="text-center">Keterangan</th>
+                            <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -78,30 +71,32 @@ return $rupiah;
                             <td>{{ $loop->index + 1 }}</td>
                             <td>{{ \Carbon\Carbon::parse($pengeluaran->tgl_pengeluaran)->format('d/m/Y') }}</td>
                             <td>{{ $pengeluaran->kategori->nama_kategori }}</td>
-                            <td>{{ formatRupiah($pengeluaran->jml_keluar) }}</td>
+                            <td>{{"Rp ".number_format($pengeluaran->jml_keluar, 0, ",", "." ) }}</td>
                             <td>{{ $pengeluaran->catatan }}</td>
                             <td class="text-center">
                                 <button class="btn btn-primary btn-sm view-button"
                                     data-url="{{ route('viewPengeluaran', ['id_pengeluaran'=>$pengeluaran->id_pengeluaran]) }}"
                                     data-toggle="modal"
                                     data-target="#viewPengeluaranModal{{ $pengeluaran->id_pengeluaran }}">
-                                    <i class="fa fa-eye"></i> Lihat
+                                    <i class="fa fa-eye"></i>
                                 </button>
                                 <a data-url="{{ route('editPengeluaran', ['id_pengeluaran'=>$pengeluaran->id_pengeluaran]) }}"
-                                    class="btn btn-warning btn-sm edit-button" role="button" data-toggle="modal"
-                                    data-target="#editPengeluaranModal{{ $pengeluaran->id_pengeluaran }}">Edit</a>
+                                    class="btn btn-warning btn-sm edit-button fa fa-pencil" role="button" data-toggle="modal"
+                                    data-target="#editPengeluaranModal{{ $pengeluaran->id_pengeluaran }}"></a>
                                 <a onclick="confirmDelete(this, '{{ $pengeluaran->id_pengeluaran }}')"
                                     href="{{ route('deletePengeluaran', $pengeluaran->id_pengeluaran) }}"
                                     data-nama="{{ $pengeluaran->kategori->nama_kategori }}"
-                                    class="btn btn-danger btn-sm ml-1 text-white delete-button" role="button">Hapus</a>
+                                    class="btn btn-danger btn-sm ml-1 text-white delete-button fa fa-trash" role="button"></a>
                             </td>
                         </tr>
                         @endforeach
-                        <tr>
-                            <td colspan="3" class="text-center">Jumlah</td>
-                            <td colspan="2">{{"Rp ".number_format($total, 0, ",", "." ) }}</td>
-                        </tr>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-center"><b>Jumlah</b></td>
+                            <td colspan="3">{{"Rp ".number_format($total, 0, ",", "." ) }}</td>
+                        </tr>
+                    </tfoot>
                 </table>
 
                 <!-- Modal untuk Menampilkan Bukti Pengeluaran -->
@@ -222,7 +217,7 @@ return $rupiah;
                                     <div class="form-group">
                                         <label for="tgl_pengeluaran_edit">Tanggal pengeluaran</label>
                                         <input type="date" class="form-control" id="tgl_pengeluaran_edit"
-                                            name="tgl_pengeluaran" value="{{ $pengeluaran->tgl_pengeluaran }}" required>
+                                            name="tgl_pengeluaran" value="{{ $pengeluaran->tgl_pengeluaran }}" required readonly>
                                     </div>
 
                                     <!-- Pilih kategori menggunakan select -->
@@ -242,14 +237,7 @@ return $rupiah;
                                     <div class="form-group">
                                         <label for="jml_keluar_edit">Nominal</label>
                                         <input type="text" class="form-control" id="jml_keluar_edit" name="jml_keluar"
-                                            value="{{ $pengeluaran->jml_keluar }}" required>
-                                    </div>
-
-                                    <!-- Input untuk tanggal pengeluaran -->
-                                    <div class="form-group">
-                                        <label for="tgl_pengeluaran_edit">Tanggal pengeluaran</label>
-                                        <input type="date" class="form-control" id="tgl_pengeluaran_edit"
-                                            name="tgl_pengeluaran" value="{{ $pengeluaran->tgl_pengeluaran }}" required>
+                                            value="{{ $pengeluaran->jml_keluar }}" required readonly>
                                     </div>
 
                                     <!-- Textarea untuk catatan -->
@@ -257,17 +245,6 @@ return $rupiah;
                                         <label for="catatan_edit">Catatan</label>
                                         <textarea class="form-control" id="catatan_edit" name="catatan" rows="3"
                                             required>{{ $pengeluaran->catatan }}</textarea>
-                                    </div>
-
-                                    <!-- Input untuk bukti pengeluaran -->
-                                    <div class="form-group">
-                                        <label for="bukti_pengeluaran_edit">Bukti Pengeluaran</label>
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="bukti_pengeluaran_edit"
-                                                name="bukti_pengeluaran" accept="image/*">
-                                            <label class="custom-file-label" for="bukti_pengeluaran_edit">Choose
-                                                file</label>
-                                        </div>
                                     </div>
 
                                     <div class="text-right">
@@ -292,6 +269,14 @@ return $rupiah;
     <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('js/sweetalert.min.js') }}"></script>
+    <script>
+        $(function () {            
+            if (!start_date.value && !end_date.value) {
+                start_date.value = @json($start_date);
+                end_date.value = @json($end_date);
+            }       
+        });
+    </script>
     <script>
         confirmDelete = function (button) {
             event.preventDefault();
@@ -326,10 +311,6 @@ return $rupiah;
             $(".view-button").on("click", function () {
                 var url = $(this).data("url");
                 $("#viewPengeluaranModal").modal("show");
-            });
-            // Format Rupiah
-            $('.rupiah').mask('000.000.000.000', {
-                reverse: true
             });
         });
 

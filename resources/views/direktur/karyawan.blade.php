@@ -12,6 +12,14 @@
             background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
             background: linear-gradient(to right, #FF4B2B, #FF416C);
         }
+
+        .card-body {
+            width: 100%;
+        }
+
+        #data-table-karyawan {
+            width: 100%;
+        }
     </style>
 @endsection
 
@@ -25,6 +33,7 @@
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{{ route('dashboardDirektur') }}">Dashboard</a></li>
                         <li class="breadcrumb-item active">Karyawan</li>
                     </ol>
                 </div><!-- /.col -->
@@ -42,19 +51,20 @@
                     <h3 class="card-title">Karyawan</h3>
                     <div class="card-tools">
                         {{-- tools --}}
-                        <span class="badge badge-info">{{ date('F') }}</span>
+                        {{-- <span class="badge badge-info">{{ date('F') }}</span> --}}
+                        <p class="small text-muted text-small mx-0 mb-0">*Data di bulan ini</p>
                     </div>
                 </div>
-                <div class="card-body table-responsive">
+                <div class="card-body">
                     <table id="data-table-karyawan" class="table table-hover">
                         <thead>
                             <tr class="text-center">
-                                <th class="col-1">No.</th>
+                                <th>No.</th>
                                 <th>Nama</th>
                                 <th>Divisi</th>
-                                <th class="col-2">nomor telepon</th>
-                                <th>Pemasukan</th>
-                                <th>Pengeluaran</th>
+                                <th>nomor telepon</th>
+                                <th>Total Pemasukan</th>
+                                <th>Total Pengeluaran</th>
                                 <th>saldo</th>
                             </tr>
                         </thead>
@@ -82,7 +92,7 @@
                 </div>
             </div>
 
-            <!-- Modal -->
+            <!-- Modal Karyawan -->
             @foreach ($karyawans as $karyawan)
                 <div class="modal fade p-0" id="karyawan-{{ $karyawan->id }}" tabindex="-1" role="dialog"
                     aria-labelledby="karyawan-1Title" aria-hidden="true">
@@ -123,19 +133,21 @@
                                                 <li class="text-sm d-flex justify-content-between">Pengeluaran:<b>Rp.
                                                         {{ number_format($karyawan->pengeluaran->isEmpty() ? 0 : $karyawan->pengeluaran[0]->total_pengeluaran, 2, ',', '.') }}</b>
                                                 </li>
-                                                <li class="text-sm d-flex justify-content-between {{ (($karyawan->pemasukan->isEmpty() ? 0 : $karyawan->pemasukan[0]->total_pemasukan) - ($karyawan->pengeluaran->isEmpty() ? 0 : $karyawan->pengeluaran[0]->total_pengeluaran)) > 0 ? 'text-success' : 'text-danger' }}">
+                                                <li
+                                                    class="text-sm d-flex justify-content-between {{ ($karyawan->pemasukan->isEmpty() ? 0 : $karyawan->pemasukan[0]->total_pemasukan) - ($karyawan->pengeluaran->isEmpty() ? 0 : $karyawan->pengeluaran[0]->total_pengeluaran) > 0 ? 'text-success' : 'text-danger' }}">
                                                     Saldo:<b>Rp.
                                                         {{ number_format(($karyawan->pemasukan->isEmpty() ? 0 : $karyawan->pemasukan[0]->total_pemasukan) - ($karyawan->pengeluaran->isEmpty() ? 0 : $karyawan->pengeluaran[0]->total_pengeluaran), 2, ',', '.') }}</b>
                                                 </li>
                                             </ul>
-                                            {{-- <div class="progress progress-xs">
-                                                <div class="progress-bar progress-bar-danger bg-success"
-                                                    style="width: 30%"></div>
-                                            </div> --}}
                                         </div>
                                         <div class="col-5 text-center">
-                                            <img src="{{ asset('storage/' . $karyawan->foto_profil) }}" alt="user-avatar"
-                                                class="img-circle img-fluid" width="200px">
+                                            @if ($karyawan->foto_profil == '' && file_exists(public_path('storage/' . Auth()->user()->foto_profil)))
+                                                <img src="{{ asset('img/user-photo-default.png') }}" alt="user-avatar"
+                                                    class="img-circle img-fluid" width="200px">
+                                            @else
+                                                <img src="{{ asset('storage/' . $karyawan->foto_profil) }}"
+                                                    alt="user-avatar" class="img-circle img-fluid" width="200px">
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -156,7 +168,7 @@
     <script src="{{ asset('js/dataTables.bootstrap4.min.js') }}"></script>
     <script>
         $(function() {
-            $("#data-table-karyawan").DataTable({
+            var dataTableConfig = {
                 order: [
                     [0, 'asc']
                 ],
@@ -167,7 +179,13 @@
                 paging: true,
                 scrollCollapse: true,
                 scrollY: '350px',
-            });
+            };
+            
+            if (window.innerWidth <= 767) {
+                dataTableConfig.scrollX = true;
+            }
+
+            $("#data-table-karyawan").DataTable(dataTableConfig);
         });
     </script>
 @endsection

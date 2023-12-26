@@ -86,12 +86,13 @@ class UserController extends Controller
             "role"      => $request->role,
             "id_divisi" => $request->id_divisi,
             "username"  => $request->username,
-            "password"  => bcrypt($request->password)
+            "password"  => bcrypt($request->password),
+            "email"  => $request->email,
         ]);
     
         return redirect(route("daftarUser"))
             ->with([
-                "success" => "Data $user->nama berhasil ditambah",
+                "berhasil" => "Data $user->nama berhasil ditambah",
                 "roles" => $roles,
                 "divisis" => $divisis,
             ]);
@@ -143,7 +144,7 @@ class UserController extends Controller
         $user->role=$validasiData["role"];
         $user->id_divisi=$validasiData["id_divisi"];
         $user->save();
-        return redirect(route("daftarUser"));  
+        return redirect(route("daftarUser"))->with("berhasil","Data $user->nama berhasil diubah");  
     }
 
     /**
@@ -155,6 +156,6 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect(route("daftarUser"))->with("success","Data $user->nama berhasil dihapus");
+        return redirect(route("daftarUser"))->with("berhasil","Data $user->nama berhasil dihapus");
     }
 }

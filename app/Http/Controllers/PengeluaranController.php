@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+
 
 class PengeluaranController extends Controller
 {
@@ -20,18 +22,26 @@ class PengeluaranController extends Controller
      */
     public function index(Request $tampil)
     {
-        $pengeluarans = tbl_pengeluaran::with('kategori')->where('status', '1')->get();
-        $kategori = tbl_kategori::all();
-        $startDate = $tampil->input('start_date', now()->subMonth()->startOfDay());
-        $endDate = $tampil->input('end_date', now()->endOfDay());
+        $time = new Carbon();
+        $time->setTimeZone('Asia/Jakarta');
+
+        $user = Auth::user();
+        $id_user = $user->id;
+
+        $kategori = tbl_kategori::all()->where('id_kategori', '<>', 8);
+        $startDate = $tampil->input('start_date', now()->startOfMonth());
+        $endDate = $tampil->input('end_date', now()->endOfMonth());
+        $start_date = $time->now()->startOfMonth()->format('Y-m-d');
+        $end_date = $time->now()->endOfMonth()->format('Y-m-d');
     
         $pengeluarans = tbl_pengeluaran::with('kategori')
             ->where('status', '1')
+            ->where('id_user', $id_user)
             ->whereBetween('tgl_pengeluaran', [$startDate, $endDate])
             ->get();
             $total =$pengeluarans->sum("jml_keluar");
             // dd($startDate, $endDate);
-        return view('pengeluaran.index', compact('pengeluarans','kategori',"total"));
+        return view('pengeluaran.index', compact('pengeluarans', 'kategori', "total", 'start_date', 'end_date'));
     }
         //cetak
         public function cetak(Request $cetak)
@@ -143,21 +153,12 @@ class PengeluaranController extends Controller
             'id_user_edit' => 'required|integer',
             'tgl_pengeluaran' => 'required|string',
             'jml_keluar' => 'required|string|max:255',
-            'bukti_pengeluaran' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'catatan' => 'nullable|string',
             'status' => 'nullable',
         ]);
     
-        if ($request->hasFile('bukti_pengeluaran')) {
-            // Delete the old file
-            Storage::delete('bukti_pengeluaran/' . $pengeluaran->bukti_pengeluaran);
-    
-            // Upload and save the new file
-            $file = $request->file('bukti_pengeluaran');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $filePath = $file->storeAs('bukti_pengeluaran', $fileName, 'public');
-            $pengeluaran->bukti_pengeluaran = $fileName;
-        }
+
+        
     
         $pengeluaran->id_kategori = $validatedData['id_kategori'];
         $pengeluaran->id_user = $validatedData['id_user'];

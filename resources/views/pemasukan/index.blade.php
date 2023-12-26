@@ -1,10 +1,3 @@
-@php
-function formatRupiah($angka){
-$rupiah = "Rp. " . number_format($angka,0,',','.');
-return $rupiah;
-}
-@endphp
-
 @extends('karyawan.layouts.master')
 
 @section("addCss")
@@ -37,7 +30,7 @@ return $rupiah;
         <div class="card">
             <div class="card-header text-right">
                 <a href="{{ route('createPemasukan') }}" class="btn btn-primary" role="button" data-toggle="modal" data-target="#tambahPemasukanModal">Tambah Data</a>
-                <a href="{{ route('cetakPemasukan', ['start_date' => request('start_date'), 'end_date' => request('end_date')]) }}" class="btn btn-success mx-1" role="button">Export PDF <i class="fa fa-file-pdf"></i></a>
+                <a href="{{ route('cetakPemasukan', ['start_date' => request('start_date'), 'end_date' => request('end_date')]) }}" class="btn btn-success mx-1 " role="button">Export PDF <i class="fa fa-file-pdf-o"></i></a>
             </div>
             <div class="card-body">
                 <form method="get" action="{{ route('daftarPemasukan') }}" class="mb-3">
@@ -52,7 +45,7 @@ return $rupiah;
                         </div>
                         <div class="col-md-4">
                             <label class="d-block invisible">Filter</label>
-                            <button type="submit" class="btn btn-primary">Filter</button>
+                            <button type="submit" class="btn btn-primary fa fa-filter"></i></button>
                         </div>
                     </div>
                 </form>
@@ -65,7 +58,7 @@ return $rupiah;
                             <th>Kategori</th>
                             <th>Nominal</th>
                             <th>Catatan</th>
-                            <th class="text-center">Keterangan</th>
+                            <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -74,17 +67,21 @@ return $rupiah;
                             <td>{{ $loop->index + 1 }}</td>
                             <td>{{ \Carbon\Carbon::parse($pemasukan->tgl_pemasukan)->format('d/m/Y') }}</td>
                             <td>{{ $pemasukan->kategori->nama_kategori }}</td>
-                            <td>{{ formatRupiah($pemasukan->jml_masuk) }}</td>
+                            <td>{{ "Rp ".number_format($pemasukan->jml_masuk, 0, ",", "." ) }}</td>
                             <td>{{ $pemasukan->catatan }}</td>
                             <td class="text-center">
                                 <button class="btn btn-primary btn-sm view-button" data-url="{{ route('viewPemasukan', ['id_pemasukan'=>$pemasukan->id_pemasukan]) }}" data-toggle="modal" data-target="#viewPemasukanModal{{ $pemasukan->id_pemasukan }}">
-                                    <i class="fa fa-eye"></i> Lihat
+                                    <i class="fa fa-eye"></i>
                                 </button>
-                                <a data-url="{{ route('editPemasukan', ['id_pemasukan'=>$pemasukan->id_pemasukan]) }}" class="btn btn-warning btn-sm edit-button" role="button" data-toggle="modal" data-target="#editPemasukanModal{{ $pemasukan->id_pemasukan }}">Edit</a>
-                                <a onclick="confirmDelete(this, '{{ $pemasukan->id_pemasukan }}')" href="{{ route('deletePemasukan', $pemasukan->id_pemasukan) }}" data-nama="{{ $pemasukan->kategori->nama_kategori }}" class="btn btn-danger btn-sm ml-1 text-white delete-button" role="button">Hapus</a>
+                                <a data-url="{{ route('editPemasukan', ['id_pemasukan'=>$pemasukan->id_pemasukan]) }}" class="btn btn-warning btn-sm edit-button fa fa-pencil" role="button" data-toggle="modal" data-target="#editPemasukanModal{{ $pemasukan->id_pemasukan }}"></a>
+                                <a onclick="confirmDelete(this, '{{ $pemasukan->id_pemasukan }}')" href="{{ route('deletePemasukan', $pemasukan->id_pemasukan) }}" data-nama="{{ $pemasukan->kategori->nama_kategori }}" class="btn btn-danger btn-sm ml-1 text-white delete-button fa fa-trash" role="button"></a>
                             </td>
                         </tr>
                         @endforeach
+                        <tr>
+                            <td colspan="3" class="text-center"><b>Jumlah</b></td>
+                            <td colspan="3">{{"Rp ".number_format($total, 0, ",", "." ) }}</td>                            
+                        </tr>
                     </tbody>
                 </table>
 
@@ -194,7 +191,7 @@ return $rupiah;
                                     <!-- Input untuk tanggal pemasukan -->
                                     <div class="form-group">
                                         <label for="tgl_pemasukan_edit">Tanggal Pemasukan</label>
-                                        <input type="date" class="form-control" id="tgl_pemasukan_edit" name="tgl_pemasukan" value="{{ $pemasukan->tgl_pemasukan }}" required>
+                                        <input type="date" class="form-control" id="tgl_pemasukan_edit" name="tgl_pemasukan" value="{{ $pemasukan->tgl_pemasukan }}" required readonly>
                                     </div>
 
                                     <!-- Pilih kategori menggunakan select -->
@@ -212,22 +209,13 @@ return $rupiah;
                                     <!-- Input untuk jumlah masuk -->
                                     <div class="form-group">
                                         <label for="jml_masuk_edit">Nominal</label>
-                                        <input type="text" class="form-control" id="jml_masuk_edit" name="jml_masuk" value="{{ $pemasukan->jml_masuk }}" required>
+                                        <input type="text" class="form-control" id="jml_masuk_edit" name="jml_masuk" value="{{ $pemasukan->jml_masuk }}" required readonly>
                                     </div>
 
                                     <!-- Textarea untuk catatan -->
                                     <div class="form-group">
                                         <label for="catatan_edit">Catatan</label>
                                         <textarea class="form-control" id="catatan_edit" name="catatan" rows="3" required>{{ $pemasukan->catatan }}</textarea>
-                                    </div>
-
-                                    <!-- Input untuk bukti edit pemasukan -->
-                                    <div class="form-group">
-                                        <label for="bukti_pemasukan_edit">Bukti Pemasukan</label>
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="bukti_pemasukan_edit" name="bukti_pemasukan" accept="image/*">
-                                            <label class="custom-file-label" for="bukti_pemasukan_edit">Choose file</label>
-                                        </div>
                                     </div>
 
                                     <div class="text-right">
@@ -252,6 +240,14 @@ return $rupiah;
     <script src="{{ asset('js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('js/sweetalert.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script>
+        $(function () {            
+            if (!start_date.value && !end_date.value) {
+                start_date.value = @json($start_date);
+                end_date.value = @json($end_date);
+            }       
+        });
+    </script>
     <script>
         confirmDelete = function(button) {
             event.preventDefault();
@@ -286,10 +282,6 @@ return $rupiah;
             $(".view-button").on("click", function() {
                 var url = $(this).data("url");
                 $("#viewPemasukanModal").modal("show");
-            });
-            // Format Rupiah
-            $('.rupiah').mask('000.000.000.000', {
-                reverse: true
             });
         });
     </script>

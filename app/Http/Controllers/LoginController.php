@@ -63,7 +63,7 @@ class LoginController extends Controller
         }
 
         // Pemberitahuan kesalahan jika otentikasi gagal
-        return redirect(route('index'))->withErrors('Email atau password salah.');
+        return redirect(route('index'))->withErrors('Username atau password salah.');
     }
   public function logout()
   {
@@ -71,6 +71,7 @@ class LoginController extends Controller
    return redirect(route('index'));
   }
 
+  //lupa password
   public function lupa()
   {
     return view('login.lupa');
@@ -110,9 +111,10 @@ class LoginController extends Controller
          }
         );
 
-    return $status === Password::PASSWORD_RESET
-    ? redirect()->route('logout')->with('status', __($status))
-    : back()->withErrors(['email' => [__($status)]]);
+
+        return $status === Password::PASSWORD_RESET
+        ? redirect()->route('logout')->with('status', __($status))
+        : back()->withErrors(['email' => [__($status)]]);
   }
 
   public function showResetForm($token)

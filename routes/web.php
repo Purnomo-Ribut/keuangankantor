@@ -18,7 +18,6 @@ route::post("/","LoginController@authenticate")->name("authenticate");
 // Route::post('/login', 'App\Http\Controllers\LoginController@authenticate')->name("authenticate");
 route::get('/logout', 'LoginController@logout')->name('logout');
 
-
 Route::group(['middleware' => 'guest'], function () {
     // Rute-rute yang hanya dapat diakses oleh tamu
     // lupa password
@@ -28,7 +27,8 @@ Route::group(['middleware' => 'guest'], function () {
 
     // ke halaman reset password 
     route::post("/update-pass","LoginController@resetpass")->name("password.update");
-    
+
+    route::get("/dashboard","LoginController@login" )->name("indexreset");
 });
 
 

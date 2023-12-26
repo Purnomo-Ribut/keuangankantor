@@ -28,7 +28,13 @@ Route::group(['middleware' => 'guest'], function () {
     // ke halaman reset password 
     route::post("/update-pass","LoginController@resetpass")->name("password.update");
 
+<<<<<<< HEAD
     route::get("/dashboard","LoginController@login" )->name("indexreset");
+=======
+    // halaman login 
+    route::get("/dashboard","LoginController@login" )->name("indexreset");
+    
+>>>>>>> 350b15d5ff89b6061e351b8f3d6173e599ae2d23
 });
 
 

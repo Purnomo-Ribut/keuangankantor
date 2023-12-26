@@ -32,7 +32,8 @@ class RedirectIfAuthenticated
                 return redirect('/karyawan');
             }
         }
-
+    
+        // Pengguna belum terautentikasi, arahkan ke halaman login
         return $next($request);
     }
 }

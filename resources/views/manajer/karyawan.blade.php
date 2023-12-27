@@ -14,7 +14,7 @@
 			</div><!-- /.col -->
 			<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
-				<li class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboard</a></li>
+					<li class="breadcrumb-item"><a href="{{route('dashboardManajer')}}">Dashboard</a></li>
 					<li class="breadcrumb-item active">Karyawan</li>
 				</ol>
 			</div><!-- /.col -->
@@ -28,7 +28,7 @@
 	<div class="container-fluid">
 	<div class="card">
 			<div class="card-header text-right">
-				<a href="{{route('createRole')}}" class="btn btn-primary" role="button" data-toggle="modal" data-target="#tambahData">Tambah Data</a>
+				<a href="{{route('createRole')}}" class="btn btn-primary fa fa-plus" role="button" data-toggle="modal" data-target="#tambahData"></a>
 			</div>
 			<div class="card-body">
 				<table class="table table-hover mb-0" id="dataTable">
@@ -53,8 +53,8 @@
 							<td class="text-center">{{ $user->nomor_telepon}}</td>
 							<td class="text-center">{{ $user->alamat}}</td>
 							<td class="text-center">
-								<a data-url="{{route('updateKaryawan',['id'=>$user->id])}}" class="btn btn-warning btn-sm" role="button" data-toggle="modal" data-target="#editData{{$user->id}}">Edit</a>
-								<button onclick="confirmDelete(this)"  data-url="{{route('deleteKaryawan',['id'=>$user->id])}}"data-nama="{{ $user->nama}}" class="btn btn-danger btn-sm ml-1 text-white" role="button">Hapus</button>
+								<a data-url="{{route('updateKaryawan',['id'=>$user->id])}}" class="btn btn-warning btn-sm fa fa-pencil" role="button" data-toggle="modal" data-target="#editData{{$user->id}}"></a>
+								<button onclick="confirmDelete(this)"  data-url="{{route('deleteKaryawan',['id'=>$user->id])}}"data-nama="{{ $user->nama}}" class="btn btn-danger btn-sm ml-1 text-white fa fa-trash" role="button"></button>
 							</td>
 						</tr>
 						@endforeach
@@ -173,6 +173,21 @@
 		<script src="{{asset('js/dataTables.bootstrap4.min.js')}}"></script>
 		<script src="{{asset('js/sweetalert.min.js')}}"></script>
 		<script>
+		var successMessage = "{{ session('berhasil') }}";
+        if (successMessage) {
+            swal({
+                // title: "Sukses",
+                text: successMessage,
+                icon: "success",
+                confirmButtonClass: 'btn btn-primary',
+                confirmButtonText: 'OK',
+                timer: 5000,
+                customClass: {
+                    // title: 'swal-title',
+                    content: 'swal-text',
+                }
+            });
+        }
 			confirmDelete = function(button) {
 				var url = $(button).data("url");
 				swal({

@@ -14,7 +14,7 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{route('dashboardManajer')}}">Dashboard</a></li>
                     <li class="breadcrumb-item active">Mutasi Keuangan</li>
                 </ol>
             </div><!-- /.col -->
@@ -47,7 +47,7 @@
                             <tr>
                                 <td class="text-center">{{ $loop->index + 1}}</td>
                                 <td class="text-center">{{ $user->nama}}</td>
-                                <td class="text-center">Rp. {{ number_format($result, 0, ',', '.') }} </td>
+                                <td class="text-center">Rp. {{ number_format($result, 0, ',', '.') }},00 </td>
                                 <td class="text-center">
                                     <a data-url="{{route('editUser',['id'=>$user->id])}}" class="btn btn-warning btn-sm fa fa-search" role="button" data-toggle="modal" data-target="#editData{{$user->id}}"></a>
                                 </td>
@@ -76,8 +76,8 @@
                         </div>
                         <div class="modal-body">
                             <div class="card-header">
-                                <div class="btn btn-outline-primary" role="button" data-toggle="modal" data-target="#tambahData">Saldo : Rp. {{ number_format($result, 0, ',', '.') }}</div>
-                                <a href="{{route('createRole')}}" class="btn btn-primary fa fa-plus" role="button" data-dismiss="modal" data-toggle="modal" data-target="#tambahPemasukanModalLabel" data-userid="{{ $user->id }}"></a>
+                                <div class="btn btn-outline-primary" role="button" data-toggle="modal" data-target="#tambahData">Saldo : Rp. {{ number_format($result, 0, ',', '.') }},00</div>
+                                <a href="{{ route('storeSaldo')}}" class="btn btn-primary fa fa-plus" role="button" data-dismiss="modal" data-toggle="modal" data-target="#tambahPemasukanModalLabel" data-userid="{{ $user->id }}"></a>
                             </div>
                             <div class="card-body">
                                 <table class="table table-hover mb-0" id="tabelModal">
@@ -106,13 +106,13 @@
                                                     <small class="text-success mr-1">
                                                         <i class="fa fa-arrow-up"></i>
                                                     </small>
-                                                    Rp. {{ number_format(isset($mutasi->jml_masuk) ? floatval($mutasi->jml_masuk) : 0, 0, ',', '.') }}
+                                                    Rp. {{ number_format(isset($mutasi->jml_masuk) ? floatval($mutasi->jml_masuk) : 0, 0, ',', '.') }},00
                                                 </td>
                                                 <td class="text-center">
                                                     <small class="text-danger mr-1">
                                                         <i class="fa fa-arrow-down"></i>
                                                     </small>
-                                                    Rp. {{ number_format(isset($mutasi->jml_keluar) ? floatval($mutasi->jml_keluar) : 0, 0, ',', '.') }}
+                                                    Rp. {{ number_format(isset($mutasi->jml_keluar) ? floatval($mutasi->jml_keluar) : 0, 0, ',', '.') }},00
                                                 </td>
                                                 <td class="text-center">{{ $mutasi->catatan }}</td>
                                                 <td class="text-center">
@@ -195,11 +195,10 @@
                     </div>
                 </div>
             @endif
-        @empty
-            <!-- Handle jika tidak ada data -->
-            <p>Tidak ada bukti pemasukan atau pengeluaran</p>
+            @empty
+
         @endforelse
-    @endforeach
+        @endforeach
 
 
         @foreach($users as $user)
@@ -343,9 +342,7 @@
                                         <button type="submit" class="btn btn-success">Simpan</button>
                                     </div>
 
-                                    <input type="hidden" name="id_user" value="{{ $user->id }}">
-                                    <input type="hidden" name="id_user_create" value="{{ $user->id }}">
-                                    <input type="hidden" name="id_user_edit" value="{{ $user->id }}">
+                                    <input type="hidden" id="id_user" name="id_user">
                                 </form>
                     </div>
                 </div>
@@ -353,7 +350,7 @@
         </div>
     </div>
     @endforeach
-    @endsection  
+
 
 
     <!-- javascript -->
@@ -362,6 +359,22 @@
         <script src="{{asset('js/dataTables.bootstrap4.min.js')}}"></script>
         <script src="{{asset('js/sweetalert.min.js')}}"></script>
         <script>
+
+        var successMessage = "{{ session('berhasil') }}";
+        if (successMessage) {
+            swal({
+                // title: "Sukses",
+                text: successMessage,
+                icon: "success",
+                confirmButtonClass: 'btn btn-primary',
+                confirmButtonText: 'OK',
+                timer: 5000,
+                customClass: {
+                    // title: 'swal-title',
+                    content: 'swal-text',
+                }
+            });
+        }
         confirmDelete = function(button){
             var url = $(button).data("url");
             swal({
@@ -382,14 +395,17 @@
             })
         }
 
-        const modalToOpen = '{{ session("modalToOpen") }}';
-
-        // Jika modalToOpen ada, tampilkan modal dengan ID yang sesuai
-        if (modalToOpen) {
-            $(document).ready(function () {
-                $(`#${modalToOpen}`).modal('show');
+        document.addEventListener('DOMContentLoaded', function() {
+            var modalTriggerButtons = document.querySelectorAll('[data-target="#tambahPemasukanModalLabel"]');
+            
+            modalTriggerButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var userId = button.getAttribute('data-userid');
+                    document.getElementById('id_user').value = userId;
+                });
             });
-        }
+        });
+
 
         $(function(){
                 $("#dataTable").DataTable({
@@ -401,7 +417,7 @@
                 $("#tabelModal").DataTable({
                     "pageLength": 5,
                     "lengthChange": false,
-                    "scrollY": '325px',
+                    "responsive": true, // Tambahkan opsi responsive
                 });
 
 
@@ -414,7 +430,8 @@
             });
 
         </script>
-    @endsection
+        @endsection
 </div>
 <!-- /.content -->
+@endsection  
 

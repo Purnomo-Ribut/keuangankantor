@@ -14,7 +14,7 @@
 			</div><!-- /.col -->
 			<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
-				<li class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboard</a></li>
+				<li class="breadcrumb-item"><a href="{{route('dashboardManajer')}}">Dashboard</a></li>
 					<li class="breadcrumb-item active">Anggaran</li>
 				</ol>
 			</div><!-- /.col -->
@@ -28,7 +28,7 @@
 	<div class="container-fluid">
 		<div class="card">
 			<div class="card-header text-right">
-				<a href="{{route('createRole')}}" class="btn btn-primary" role="button" data-toggle="modal" data-target="#tambahData">Tambah Data</a>
+				<a href="{{route('createRole')}}" class="btn btn-primary fa fa-plus" role="button" data-toggle="modal" data-target="#tambahData"></a>
 			</div>
 			<div class="card-body">
 				<table class="table table-hover mb-0" id="dataTable">
@@ -53,8 +53,8 @@
 							<td class="text-center">Rp. {{ number_format($anggaran->aktualisasi_anggaran, 2, ',', '.') }}</td>
 							<td class="text-center">{{ date('d/m/Y', strtotime($anggaran->tgl_anggaran))}}</td>
 							<td class="text-center">
-								<a data-url="{{route('editAnggaran',['id_anggaran'=>$anggaran->id_anggaran])}}" class="btn btn-warning btn-sm" role="button" data-toggle="modal" data-target="#editData{{$anggaran->id_anggaran}}" >Edit</a>
-								<button onclick="confirmDelete(this)"  data-url="{{route('deleteAnggaran',['id_anggaran'=>$anggaran->id_anggaran])}}" class="btn btn-danger btn-sm ml-1 text-white" role="button">Hapus</button>
+								<a data-url="{{route('editAnggaran',['id_anggaran'=>$anggaran->id_anggaran])}}" class="btn btn-warning btn-sm fa fa-pencil" role="button" data-toggle="modal" data-target="#editData{{$anggaran->id_anggaran}}" ></a>
+								<button onclick="confirmDelete(this)"  data-url="{{route('deleteAnggaran',['id_anggaran'=>$anggaran->id_anggaran])}}" class="btn btn-danger btn-sm ml-1 text-white fa fa-trash" role="button"></button>
 							</td>
 						</tr>
 						@endforeach
@@ -109,25 +109,7 @@
 							<div class="form-group">
 
 								<label for="kategori">Kategori</label>
-								<div class="input-group">
-									@php
-										$kategoris = App\tbl_kategori::get();
-									@endphp
-
-									<select id="kategori" class="form-control @error('kategori') is-invalid @enderror" name="kategori" value="{{ old('kategori') }}" required autocomplete="kategori">
-										@foreach ($kategoris as $kategori)
-											<option value="{{ $kategori->id_kategori }}">{{ $kategori->nama_kategori }}</option>
-										@endforeach
-										<option value="" hidden></option>
-									</select>
-									@error('kategori')
-										<span class="invalid-feedback" role="alert">
-											<strong>{{ $message }}</strong>
-										</span>
-									@enderror
-
-								</div>
-
+                                <input type="text" name="kategori" id="kategori" class="form-control" required value="Anggaran Divisi" readonly>
 								<label for="rencana_anggaran">Rencana Anggaran</label>
 								<input type="text" name="rencana_anggaran" id="rencana_anggaran" class="form-control" required placeholder="Masukkan Rencana Anggaran">
 								<label for="aktualisasi_anggaran">Aktualisasi Anggaran</label>
@@ -168,25 +150,7 @@
                         <div class="form-group">
 
                             <label for="kategori">Kategori</label>
-                            <div class="input-group">
-                                @php
-                                    $kategoris = App\tbl_kategori::get();
-                                @endphp
-
-                                <select id="kategori" class="form-control @error('kategori') is-invalid @enderror" name="kategori" required autocomplete="kategori">
-                                    @foreach ($kategoris as $kategori)
-                                        <option value="{{ $kategori->id_kategori }}" {{ $anggaran->id_kategori == $kategori->id_kategori ? 'selected' : '' }}>
-                                            {{ $kategori->nama_kategori }}
-                                        </option>
-                                    @endforeach
-                                    <option value="" hidden></option>
-                                </select>
-                                @error('kategori')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
+                            <input type="text" name="kategori" id="kategori" class="form-control" required value="Anggaran Divisi" readonly>
 
                             <label for="rencana_anggaran">Rencana Anggaran</label>
                             <input type="text" name="rencana_anggaran" id="rencana_anggaran" class="form-control" required placeholder="Masukkan Rencana Anggaran" value="{{ $anggaran->rencana_anggaran }}">
@@ -247,6 +211,21 @@
 			});
 		</script>
 		 <script>
+        var successMessage = "{{ session('berhasil') }}";
+        if (successMessage) {
+            swal({
+                // title: "Sukses",
+                text: successMessage,
+                icon: "success",
+                confirmButtonClass: 'btn btn-primary',
+                confirmButtonText: 'OK',
+                timer: 5000,
+                customClass: {
+                    // title: 'swal-title',
+                    content: 'swal-text',
+                }
+            });
+        }
         $(function() {
             var tanggalBulanans = @json($tanggalBulanans);
             for (const key in tanggalBulanans) {

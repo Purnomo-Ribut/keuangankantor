@@ -3,6 +3,7 @@
 @section("addCss")
 <link rel="stylesheet" href="{{asset('css/profile.css')}}">
 <style>
+<<<<<<< HEAD
     @media (max-width: 500px) {
         .wadah {
             margin-left: 110px;
@@ -20,6 +21,24 @@
         }
     }
 
+=======
+@media (max-width: 500px) {
+    .wadah {
+        margin-left: 110px;
+        margin-bottom: 15px;
+    }
+
+    .profile-image {
+        max-width: 100%;
+        height: auto; 
+        max-height: 100px
+    }
+    .wadah2{
+        margin-left: 65px;        
+    }
+}
+
+>>>>>>> 3330cba9ccbc8990d1acdc82b4f1a2d52e2989ea
 </style>
 
 
@@ -31,7 +50,11 @@
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h4 class="font-weight-bold">
+<<<<<<< HEAD
                     Edit Profil
+=======
+                  Edit Profil
+>>>>>>> 3330cba9ccbc8990d1acdc82b4f1a2d52e2989ea
                 </h4>
             </div>
             <div class="col-sm-6">

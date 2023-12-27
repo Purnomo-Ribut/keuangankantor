@@ -14,6 +14,11 @@
 	<link rel="stylesheet" href="{{asset('css/adminlte.min.css')}}">
 	<!-- Google Font: Source Sans Pro -->
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+	
+	 <!-- Favicon -->
+	 <link rel="icon" href="{{asset('img/app-logo-shadow.png')}}" type="png">
+	 <!-- Ikon Perangkat Seluler -->
+	 <link rel="apple-touch-icon" sizes="180x180" href="{{asset('img/app-logo-shadow.png')}}">
 
 	@yield('addCss')
 </head>
